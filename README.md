@@ -2,7 +2,7 @@
 Clone this [repository](https://github.com/mmatteo-hub/VR4R_Assignment).  
 To set the environment, run:
 ```
-echo "export $WSL_HOST_IP=(your WSL IP address)" >> ⁓/.bashrc"
+echo "export $WSL_HOST_IP=(your WSL IP address)" >> ⁓/.bashrc
 sudo apt install python-is-python3
 python3 -m pip install pymap3d
 ```
