@@ -10,8 +10,8 @@ Then, type in the terminal: (per runnare la soluzione della repository clonata!)
 ```
 roslaunch airsim_ros_pkgs airsim_node.launch output:=screen host:=$WSL_HOST_IP
 python3 ./run.py
-rosservice call /graph_knowledge/load_graph         (press Tab)
-rosservice call /graph_knowledge/compute_path       (press Tab)
+rosservice call /graph_knowledge/load_graph         (press Tab and complete with path to your .jason graph)
+rosservice call /graph_knowledge/compute_path       (press Tab and complete with start and goal nodes)
 ```
 rosrun pollution_monitoring test.py
 
