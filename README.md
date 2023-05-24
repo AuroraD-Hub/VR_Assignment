@@ -12,17 +12,18 @@ Once it is done, go into the `AirSim` folder and modify the `setting.json` file 
     "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/main/docs/settings.md",
     "SettingsVersion": 1.2,
     "SimMode": "Multirotor",
+    "ViewMode": "GroundObserver",
 
     "Vehicles": {
       "Drone1": {
         "VehicleType": "SimpleFlight",
 	  "DefaultVehicleState": "Disarmed",
-        "X": 38745.585938,"Y": 8585.320312,"Z": 10536.760742
+        "X": 5058.023438,"Y": 62914.742188,"Z": 1390.60144
       },
       "Drone2": {
         "VehicleType": "SimpleFlight",
 	  "DefaultVehicleState": "Disarmed",
-        "X": 38747.585938,"Y": 8587.320312,"Z": 10536.760742
+        "X": 5060.023438,"Y": 62914.742188,"Z": 1390.60144
       }
 
     }
