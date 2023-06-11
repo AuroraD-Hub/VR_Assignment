@@ -50,4 +50,5 @@ rosservice call /graph_knowledge/compute_path       (press Tab and complete with
 rosrun pollution_monitoring test.py
 
 # TO DO
-Creare grafico json (file già presente nella folder *graphs*) con posizione base parametro
+Creare grafico json (file già presente nella folder *graphs*) con posizione base parametro  
+Creare script per arm/disarm dei droni (prendere comando da input in terminale da utente)
