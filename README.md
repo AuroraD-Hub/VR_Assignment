@@ -12,18 +12,18 @@ Once it is done, go into the `AirSim` folder and modify the `setting.json` file 
     "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/main/docs/settings.md",
     "SettingsVersion": 1.2,
     "SimMode": "Multirotor",
-    "ViewMode": "GroundObserver",
+    "ViewMode": "FlyWithMe",
 
     "Vehicles": {
       "Drone1": {
         "VehicleType": "SimpleFlight",
-	  "DefaultVehicleState": "Disarmed",
-        "X": 5058.023438,"Y": 62914.742188,"Z": 1390.60144
+        "DefaultVehicleState": "Disarmed",
+        "X": 94050.0,"Y": 73410.0,"Z": 612.0, "Yaw": 0
       },
       "Drone2": {
         "VehicleType": "SimpleFlight",
-	  "DefaultVehicleState": "Disarmed",
-        "X": 5060.023438,"Y": 62914.742188,"Z": 1390.60144
+        "DefaultVehicleState": "Disarmed",
+        "X": 94050.0,"Y": 73610.0,"Z": 612.0, "Yaw": 0
       }
 
     }
@@ -37,6 +37,7 @@ sudo apt install python-is-python3
 python3 -m pip install pymap3d
 ```
 Finally, in your ROS workspace clone this [repository](https://github.com/mmatteo-hub/VR4R_Assignment).  
+To correctly visualize the map, make sure that `Sun Position Controller` plugin is enabled in UE. For more details, read UE DOcumentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
 Now everything is set to run the simulation!
 ## Running
 To run the simulation, type in the terminal:
