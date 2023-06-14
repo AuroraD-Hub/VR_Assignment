@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <launch>
 		
-	<include file="$(AirSim)/ros/src/airsim_ros_pkgs/launch/airsim_node.launch">
-   
-    
+	<include file="$(find airsim_ros_pkgs)/launch/airsim_node.launch"/>
+   	<node name="interface" pkg="VR_Assignment" type="drone_interface.py" launch-prefix="gnome-terminal"/>
+
 </launch>
