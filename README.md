@@ -51,7 +51,26 @@ rosservice call /graph_knowledge/load_graph         (press Tab and complete with
 rosservice call /graph_knowledge/compute_path       (press Tab and complete with start and goal nodes)
 ||
 ```
-rosrun pollution_monitoring test.py
+## Troubleshooting
+If you need to temporarly disable the WSL, you can run the following commands to save all your file:  
+Open the Windows prompt and run:
+```
+wsl --export <Distribution Name> <FileName>
+```
+Note that with this line you get a `.tar` file in which all your latest files and installations are saved. This file will be stored in the folder in which your terminal was open.
+
+Whenever you need to enable it again, do the following steps:
+1. Open the Windows prompt and run:
+   ```
+   wsl --import <Distribution Name> <InstallLocation> <FileName>
+   ```
+2. Open your WSL ditribution terminal and run:
+   ```
+   sudo apt update
+   sudo apt upgrade
+   sudo apt --fix-broken install
+   ```
+Now your WSL installation should be up and running smooth again.
 
 # TO DO
 Creare grafico json (file già presente nella folder *graphs*) con posizione base parametro  
