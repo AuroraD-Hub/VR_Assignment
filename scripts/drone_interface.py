@@ -8,7 +8,7 @@ from drone_coverage_msgs.srv import LoadCoverageGraph
 from drone_coverage_msgs.srv import ComputeCoveragePath
 #from VR4R_Assignment import CoverageUtils
 
-def start_drone_cvoverage(drones_name):
+def start_drone_coverage(drones_name):
 	i = input("Do you want to arm the drones? [Y/N] /n To quit the interface press 'Q'.")
 	if i == Y or i == y:
 		for drone in drones_name:
@@ -45,8 +45,6 @@ def main():
 		
 	# Get the names of all the spawned drones
 	drones_names = client.listVehicles()
-	#drones_names = CoverageUtils.get_drones_names()
-	#drone_names = rospy.get_param("/drone_name")
 	print(drones_name)
 	
 	# Disarm all the drones at start
