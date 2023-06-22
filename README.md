@@ -43,10 +43,13 @@ Now everything is set to run the simulation!
 ## Running
 To run the simulation, type in the terminal:
 ```
+roslaunch VR_Assignment pollution_moniotring.launch
+||
 roslaunch airsim_ros_pkgs airsim_node.launch output:=screen host:=$WSL_HOST_IP
 python3 ./run.py
-rosservice call /graph_knowledge/load_graph         (press Tab and complete with path to your .jason graph)
+rosservice call /graph_knowledge/load_graph         (press Tab and complete with path to your .json graph)
 rosservice call /graph_knowledge/compute_path       (press Tab and complete with start and goal nodes)
+||
 ```
 rosrun pollution_monitoring test.py
 
