@@ -76,7 +76,11 @@ Whenever you need to enable it again, do the following steps:
    rospack profile
    rospack list
    ```
-   Do these steps to be sure your ROS environment is properly sourced and all your packages are available.  
+   Do these steps to be sure your ROS environment is properly sourced and all your packages are available.
+4. To re-establish connection with your GitHub repository type:
+    ```
+    git config --global --add safe.directory
+    ```
 Now your WSL installation should be up and running smooth again.
 
 # TO DO
