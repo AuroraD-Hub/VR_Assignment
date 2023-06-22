@@ -70,6 +70,13 @@ Whenever you need to enable it again, do the following steps:
    sudo apt upgrade
    sudo apt --fix-broken install
    ```
+3. Go to your workspace and type:
+   ```
+   source devel/setup.bash
+   rospack profile
+   rospack list
+   ```
+   Do these steps to be sure your ROS environment is properly sourced and all your packages are available.  
 Now your WSL installation should be up and running smooth again.
 
 # TO DO
