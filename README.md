@@ -69,15 +69,19 @@ Whenever you need to enable it again, do the following steps:
    sudo apt update
    sudo apt upgrade
    sudo apt --fix-broken install
+   ```  
+   Note that if you enter in WSl as `root`, but your command are in your user `home` folder, type:
    ```
-3. Go to your workspace and type:
+   source /path_to_your_user_home_folder/.bashrc
+   ``` 
+4. Go to your workspace and type:
    ```
    source devel/setup.bash
    rospack profile
    rospack list
    ```
    Do these steps to be sure your ROS environment is properly sourced and all your packages are available.
-4. To re-establish connection with your GitHub repository type:
+5. To re-establish connection with your GitHub repository type:
     ```
     git config --global --add safe.directory
     ```
