@@ -64,16 +64,17 @@ Whenever you need to enable it again, do the following steps:
    ```
    wsl --import <Distribution Name> <InstallLocation> <FileName>
    ```
-2. Open your WSL ditribution terminal and run:
+2. Open your WSL ditribution terminal and note if you enter as `root`. If this is the case, but your command are in your user `home` folder, type:
+   ```
+   gedit .bashrc
+   ```
+   and type `source /path_to_your_user_home_folder/.bashrc` at the end of the file. Now close the terminal.  
+2. Reopen your WSL ditribution terminal and run:
    ```
    sudo apt update
    sudo apt upgrade
    sudo apt --fix-broken install
    ```  
-   Note that if you enter in WSl as `root`, but your command are in your user `home` folder, type:
-   ```
-   source /path_to_your_user_home_folder/.bashrc
-   ``` 
 4. Go to your workspace and type:
    ```
    source devel/setup.bash
