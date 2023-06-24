@@ -35,6 +35,7 @@ Then, to set the environment for the project, run on Ubuntu terminal:
 echo "export WSL_HOST_IP=(your WSL IP address)" >> ⁓/.bashrc
 sudo apt install python-is-python3
 python3 -m pip install pymap3d
+pip install airsim
 sudo pip install msgpack-rpc-python (SERVE???)
 ```
 Finally, in your ROS workspace clone this [repository](https://github.com/mmatteo-hub/VR4R_Assignment).  
