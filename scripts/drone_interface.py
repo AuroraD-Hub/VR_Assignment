@@ -2,6 +2,7 @@
 
 import rospy
 import os
+import setup_path
 import airsim
 import time
 from drone_coverage_msgs.srv import LoadCoverageGraph

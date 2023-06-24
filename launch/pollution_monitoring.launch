@@ -2,7 +2,7 @@
 <launch>
 		
 	<node name="airsim" pkg="screen" type="screen" args="-dmS airsim_launch bash -c 'roslaunch airsim_ros_pkgs airsim_node.launch host:=$WSL_HOST_IP'"/>
-	<node name="VR4R" pkg="screen" type="screen" args="-dmS drone_coverage bash -c 'python3 ($find VR4R_Assignment)/./run.py'"/>
+	<node name="VR4R" pkg="screen" type="screen" args="-dmS drone_coverage bash -c 'python3 ($find VR4R_Assignment)/run.py'"/>
    	<node name="interface" pkg="VR_Assignment" type="drone_interface.py" launch-prefix="gnome-terminal"/>
 
 </launch>
