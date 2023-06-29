@@ -13,17 +13,28 @@ Once it is done, go into the `AirSim` folder and modify the `setting.json` file 
     "SettingsVersion": 1.2,
     "SimMode": "Multirotor",
     "ViewMode": "FlyWithMe",
+    "LocalHostIp": "172.23.32.1",
+    "ApiServerPort": 41451,
 
     "Vehicles": {
       "Drone1": {
         "VehicleType": "SimpleFlight",
         "DefaultVehicleState": "Disarmed",
-        "X": 94050.0,"Y": 73410.0,"Z": 612.0, "Yaw": 0
-      },
-      "Drone2": {
-        "VehicleType": "SimpleFlight",
-        "DefaultVehicleState": "Disarmed",
-        "X": 94050.0,"Y": 73610.0,"Z": 612.0, "Yaw": 0
+        "Gps": {
+                "SensorType": 3,
+                "Enabled" : true,
+                "EphTimeConstant": 0.9,
+                "EpvTimeConstant": 0.9,
+                "EphInitial": 25,
+                "EpvInitial": 25,
+                "EphFinal": 0.1,
+                "EpvFinal": 0.1,
+                "EphMin3d": 3,
+                "EphMin2d": 4,
+                "UpdateLatency": 0.2,
+                "UpdateFrequency": 50,
+                "StartupDelay": 1
+               }
       }
 
     }
