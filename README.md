@@ -49,7 +49,7 @@ python3 -m pip install pymap3d
 pip install airsim
 sudo pip install msgpack-rpc-python 
 ```
-Finally, in your ROS workspace clone this [repository](https://github.com/mmatteo-hub/VR4R_Assignment).  
+Finally, in your ROS workspace clone this [repository](https://github.com/mmatteo-hub/VR4R_Assignment). Make sure to build your workspace and source it.  
 To correctly visualize the map, make sure that `Sun Position Controller` plugin is enabled in UE. For more details, read UE DOcumentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
 Now everything is set to run the simulation!
 ## Running
