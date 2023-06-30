@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 
 import rospy
+import sys
 import os
+from os.path import dirname, realpath
 import setup_path
 import airsim
 import smach
@@ -9,6 +11,7 @@ import smach_ros
 import time
 import json
 from geometry_msgs.msg import Pose
+from graph_loader import LoadCoverageGraph, ComputeCoveragePath  # ModuleNotFoundError: No module named 'graph_loader'
 
 # CAR_MOVING State
 class CarMoving(smach.State):
@@ -24,32 +27,40 @@ class CarMoving(smach.State):
 		client = airsim.CarClient(ip="172.23.32.1", port=41451)
 		client.confirmConnection()
 		client.enableApiControl(True)
+		
+		print("There should be a car: ", client.listVehicles())
 	       
 		# Load JSON path file
-		with open("../graphs/drone_graph.json") as drone_path:
+		path = dirname(dirname(realpath(__file__)))
+		path = path + '/graphs/drone_graph.json'
+		with open(path) as drone_path:
 			data = json.load(drone_path)
 		
 		# Start interface
 		i = input("Whenever you reach your desired position, press 'D' to arm the drone: ")
 		if i == 'D' or i == 'd': 
-			self.pose = client.simGetVehiclePose('Car')
-			update_path(client, self.pose) 
-			client.simDestroyObject('Car')
+			self.pose = client.simGetVehiclePose('PhysXCar')
+			self.update_path(path, client, data, self.pose) 
+			client.simDestroyObject('PhysXCar')
+			print("There should not be anything: ", client.listVehicles())
 			client.simAddVehicle('Multirotor', 'SimpleFlight', self.pose)
+			print("There should be a drone: ", client.listVehicles())
 			return 'goal_reached'
 		else:
-			with open("./graphs/drone_graph.json") as close_file:
+			#"./graphs/drone_graph.json"
+			with open(path, "w") as close_file:
 				json.dump(data, close_file, indent=2)
 			return 'sampling_done'
 		
-	def update_path(self, client, data, pose):
+	def update_path(self, path, client, data, pose):
 	# update (x,y) vehicle position
-		for i in range(0,3):
+		print("Car reached position ", (pose.position.x_val, pose.position.y_val), ".")
+		for i in range(0,4):
 			data["nodes"][f"p{i}"]["position"][0] = pose.position.x_val
 			data["nodes"][f"p{i}"]["position"][1] = pose.position.y_val
 			data["nodes"][f"p{i}"]["position"][2] = pose.position.z_val+i*10
 			
-		with open("./graphs/drone_graph.json") as save_path:
+		with open(path, "w") as save_path:
 			json.dump(data, save_path, indent=2)
 	
 # DRONE_FLYING State
@@ -67,13 +78,17 @@ class DroneFlying(smach.State):
 		client.confirmConnection()
 		client.enableApiControl(True)
 		
+		print("There should be a drone: ", client.listVehicles())
+		
 		#Stat interface
 		print("Execute './run.py' from VR4R_Assignment")
 		input("Done? If so, press any key to continue.")
 	       
 		# Load JSON graph and path to follow
+		graph = dirname(dirname(realpath(__file__)))
+		graph = graph + '/graphs/drone_graph.json'
 		client_file = rospy.ServiceProxy('/graph_knowledge/load_graph', LoadCoverageGraph)
-		client_file.call('../graphs/drone_graph.json')
+		client_file.call(graph)
 		drone_path = "node_start: 'p0' node_goal: 'p0'"
 		client_drone_path = rospy.ServiceProxy('/graph_knowledge/compute', ComputeCoveragePath)
 		client_drone_path.call(drone_path)
@@ -82,8 +97,10 @@ class DroneFlying(smach.State):
 		i = input("When the drone is landed, press 'C' to move to another position for sampling.")
 		if i == 'C' or i == 'c': 
 			self.pose = client.simGetVehiclePose('Multirotor')
+			print("There should not be anything: ", client.listVehicles())
 			client.simDestroyObject('Multirotor')
-			client.simAddVehicle('Car', 'SpringArmChase', self.pose)
+			client.simAddVehicle('Car', 'PhysXCar', self.pose)
+			print("There should be a car: ", client.listVehicles())
 			return 'sampling_done'
 		else:
 			return 'goal_reached'
