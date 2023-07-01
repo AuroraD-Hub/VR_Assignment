@@ -12,6 +12,9 @@ find_package(catkin REQUIRED COMPONENTS
   nav_msgs
   rospy
   tf
+  graph_loader
+  drone_coverage
+  drone_coverage_msg
 )
 
 ## System dependencies are found with CMake's conventions

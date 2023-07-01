@@ -11,7 +11,7 @@ import smach_ros
 import time
 import json
 from geometry_msgs.msg import Pose
-from graph_loader import LoadCoverageGraph, ComputeCoveragePath  # ModuleNotFoundError: No module named 'graph_loader'
+from drone_coverage_msgs.srv import LoadCoverageGraph, ComputeCoveragePath
 
 # CAR_MOVING State
 class CarMoving(smach.State):
@@ -89,12 +89,11 @@ class DroneFlying(smach.State):
 		graph = graph + '/graphs/drone_graph.json'
 		client_file = rospy.ServiceProxy('/graph_knowledge/load_graph', LoadCoverageGraph)
 		client_file.call(graph)
-		drone_path = "node_start: 'p0' node_goal: 'p0'"
-		client_drone_path = rospy.ServiceProxy('/graph_knowledge/compute', ComputeCoveragePath)
-		client_drone_path.call(drone_path)
+		client_drone_path = rospy.ServiceProxy('/graph_knowledge/compute_path', ComputeCoveragePath)
+		client_drone_path.call('p0', 'p0')
 		
 		# Start interface
-		i = input("When the drone is landed, press 'C' to move to another position for sampling.")
+		i = input("When the drone is landed, press 'C' to move to another position for sampling: ")
 		if i == 'C' or i == 'c': 
 			self.pose = client.simGetVehiclePose('Multirotor')
 			print("There should not be anything: ", client.listVehicles())

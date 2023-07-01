@@ -53,14 +53,23 @@
   <build_depend>nav_msgs</build_depend>
   <build_depend>rospy</build_depend>
   <build_depend>tf</build_depend>
+  <build_depend>graph_loader</build_depend>
+  <build_depend>drone_coverage</build_depend>
+  <build_depend>drone_coverage_msg</build_depend>
   <build_export_depend>airsim_ros_pkgs</build_export_depend>
   <build_export_depend>nav_msgs</build_export_depend>
   <build_export_depend>rospy</build_export_depend>
   <build_export_depend>tf</build_export_depend>
+  <build_export_depend>graph_loader</build_export_depend>
+  <build_export_depend>drone_coverage</build_export_depend>
+  <build_export_depend>drone_cpverage_msg</build_export_depend>
   <exec_depend>airsim_ros_pkgs</exec_depend>
   <exec_depend>nav_msgs</exec_depend>
   <exec_depend>rospy</exec_depend>
   <exec_depend>tf</exec_depend>
+  <exec_depend>graph_loader</exec_depend>
+  <exec_depend>drone_coverage</exec_depend>
+  <exec_depend>drone_coverage_msg</exec_depend>
 
 
   <!-- The export tag contains other, unspecified, tags -->
