@@ -11,7 +11,7 @@ Once it is done, go into the `AirSim` folder in `Documents` and modify the `sett
 {
     "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/main/docs/settings.md",
     "SettingsVersion": 1.2,
-    "SimMode": "",
+    "SimMode": "Car",
     "LocalHostIp": "172.23.32.1",
     "ApiServerPort": 41451,
     "Vehicles": {
