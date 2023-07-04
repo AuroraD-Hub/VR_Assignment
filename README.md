@@ -88,7 +88,3 @@ Whenever you need to enable it again, do the following steps:
     git config --global --add safe.directory
     ```
 Now your WSL installation should be up and running smooth again.
-
-# TO DO
-Creare grafico json (file già presente nella folder *graphs*) con posizione base parametro  
-Creare script per arm/disarm dei droni (prendere comando da input in terminale da utente)
