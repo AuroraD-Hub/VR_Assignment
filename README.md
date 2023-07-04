@@ -6,37 +6,22 @@ git clone https://github.com/Microsoft/AirSim.git
 cd AirSim
 build.cmd
 ```
-Once it is done, go into the `AirSim` folder and modify the `setting.json` file so that it looks like this:  
+Once it is done, go into the `AirSim` folder in `Documents` and modify the `setting.json` file so that it looks like this:  
 ```
 {
     "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/main/docs/settings.md",
     "SettingsVersion": 1.2,
-    "SimMode": "Multirotor",
-    "ViewMode": "FlyWithMe",
+    "SimMode": "",
     "LocalHostIp": "172.23.32.1",
     "ApiServerPort": 41451,
-
     "Vehicles": {
-      "Drone1": {
+      "Car": {
+        "VehicleType": "PhysXCar"
+      },
+      "Multirotor": {
         "VehicleType": "SimpleFlight",
-        "DefaultVehicleState": "Disarmed",
-        "Gps": {
-                "SensorType": 3,
-                "Enabled" : true,
-                "EphTimeConstant": 0.9,
-                "EpvTimeConstant": 0.9,
-                "EphInitial": 25,
-                "EpvInitial": 25,
-                "EphFinal": 0.1,
-                "EpvFinal": 0.1,
-                "EphMin3d": 3,
-                "EphMin2d": 4,
-                "UpdateLatency": 0.2,
-                "UpdateFrequency": 50,
-                "StartupDelay": 1
-               }
+        "DefaultVehicleState": "Disarmed"
       }
-
     }
 }
 ```
@@ -49,19 +34,23 @@ python3 -m pip install pymap3d
 pip install airsim
 sudo pip install msgpack-rpc-python 
 ```
-Finally, in your ROS workspace clone this [repository](https://github.com/mmatteo-hub/VR4R_Assignment). Make sure to build your workspace and source it.  
+Finally, in your ROS workspace clone this [package](https://github.com/mmatteo-hub/VR4R_Assignment) and this repository typing:
+```
+git clone https://github.com/mmatteo-hub/VR4R_Assignment
+git clone https://github.com/AuroraD-Hub/VR_Assignment
+```
+Make sure to build your workspace and source it.  
 To correctly visualize the map, make sure that `Sun Position Controller` plugin is enabled in UE. For more details, read UE DOcumentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
 Now everything is set to run the simulation!
 ## Running
-To run the simulation, type in the terminal:
+To run the simulation, type in different terminals:
 ```
-roslaunch VR_Assignment pollution_moniotring.launch
-||
 roslaunch airsim_ros_pkgs airsim_node.launch output:=screen host:=$WSL_HOST_IP
+
+rosrun VR_Assignment interface_sm.py
+
+cd <cloned VR4R_Assignment repo>
 python3 ./run.py
-rosservice call /graph_knowledge/load_graph         (press Tab and complete with path to your .json graph)
-rosservice call /graph_knowledge/compute_path       (press Tab and complete with start and goal nodes)
-||
 ```
 ## Troubleshooting
 If you need to temporarly disable the WSL, you can run the following commands to save all your file:  
