@@ -39,9 +39,9 @@ class CarMoving(smach.State):
 		# Start interface
 		i = input("Whenever you reach your desired position, press 'D' to arm the drone: ")
 		if i == 'D' or i == 'd': 
-			self.pose = client.simGetVehiclePose('PhysXCar')
+			self.pose = client.simGetVehiclePose('Car')
 			self.update_path(path, client, data, self.pose) 
-			client.simDestroyObject('PhysXCar')
+			client.simDestroyObject('Car')
 			print("There should not be anything: ", client.listVehicles())
 			client.simAddVehicle('Multirotor', 'SimpleFlight', self.pose)
 			print("There should be a drone: ", client.listVehicles())
