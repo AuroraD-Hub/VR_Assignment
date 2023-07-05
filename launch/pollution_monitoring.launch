@@ -1,8 +1,13 @@
 <?xml version="1.0"?>
 <launch>
 		
-	<node name="airsim" pkg="screen" type="screen" args="-dmS airsim_launch bash -c 'roslaunch airsim_ros_pkgs airsim_node.launch host:=$WSL_HOST_IP'"/>
-	<node name="VR4R" pkg="screen" type="screen" args="-dmS drone_coverage bash -c 'python3 ($find VR4R_Assignment)/run.py'"/>
-   	<node name="interface" pkg="VR_Assignment" type="drone_interface.py" launch-prefix="gnome-terminal"/>
+	<include file="$(find airsim_ros_pkgs)/launch/airsim_node.launch">
+		<arg name="output" value="screen" />
+		<arg name="host" value="172.23.32.1" />
+	</include>
+   	<node name="interface" pkg="VR_Assignment" type="interface_sm.py" launch-prefix="gnome-terminal -e"/>
+   	<include file="$(find VR_Assignment)/run.py">
+		<arg name="output" value="gnome-terminal -e" />
+	</include>
 
 </launch>

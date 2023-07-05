@@ -42,8 +42,10 @@ class CarMoving(smach.State):
 			self.pose = client.simGetVehiclePose('Car')
 			self.update_path(path, client, data, self.pose) 
 			client.simDestroyObject('Car')
+			time.sleep(3)
 			print("There should not be anything: ", client.listVehicles())
 			client.simAddVehicle('Multirotor', 'SimpleFlight', self.pose)
+			time.sleep(3)
 			print("There should be a drone: ", client.listVehicles())
 			return 'goal_reached'
 		else:
@@ -96,9 +98,11 @@ class DroneFlying(smach.State):
 		i = input("When the drone is landed, press 'C' to move to another position for sampling: ")
 		if i == 'C' or i == 'c': 
 			self.pose = client.simGetVehiclePose('Multirotor')
-			print("There should not be anything: ", client.listVehicles())
 			client.simDestroyObject('Multirotor')
+			time.sleep(3)
+			print("There should not be anything: ", client.listVehicles())
 			client.simAddVehicle('Car', 'PhysXCar', self.pose)
+			time.sleep(3)
 			print("There should be a car: ", client.listVehicles())
 			return 'sampling_done'
 		else:
@@ -128,7 +132,6 @@ def main():
         smach.StateMachine.add('DRONE_FLYING', DroneFlying(),
                                transitions={'goal_reached':'DRONE_FLYING',
                                             'sampling_done':'CAR_MOVING'})
-
 
     # Create and start the introspection server for visualization
     sis = smach_ros.IntrospectionServer('server_name', sm, '/SM_ASSIGNMENT')
