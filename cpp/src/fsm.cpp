@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <airsim>
 #include <ros/ros.h>
 #include <geometry_msgs/Pose.h>
 #include <drone_coverage_msgs/LoadCoverageGraph.h>
