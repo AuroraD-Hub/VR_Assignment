@@ -32,7 +32,7 @@ public:
     // Connessione al simulatore AirSim per il veicolo Car
     msr::airlib::CarRpcClient client("172.23.32.1", 41451);
     client.confirmConnection();
-    client.enableApiControl(true);
+    client.enableApiControl(true, "Car");
 
     std::cout << "There should be a car\n";
 
@@ -48,7 +48,7 @@ public:
     std::cin >> input;
     if (input == "D" || input == "d") {
       // Aggiornamento del percorso e cambio veicolo a drone
-      pose_ = client.simGetVehiclePose("Car");
+      pose_ = client.getCarState("Car").getPosition();
       updatePath(path, client, data, pose_);
       client.simDestroyObject("Car");
 
@@ -101,7 +101,7 @@ public:
     // Connessione al simulatore AirSim per il veicolo Drone
     mrs::airlib::MultirotorRpcLibClient client("172.23.32.1", 41451);
     client.confirmConnection();
-    client.enableApiControl(true);
+    client.enableApiControl(true, "Multirotor");
 
     std::cout << "There should be a drone\n";
 
@@ -125,7 +125,7 @@ public:
     std::cin >> input;
     if (input == "C" || input == "c") {
       // Cambio veicolo a car
-      pose_ = client.simGetVehiclePose("Multirotor");
+      pose_ = client.getMultirotorState("Multirotor").getPosition();
       std::cout << "There should not be anything\n";
       client.simDestroyObject("Multirotor");
       client.simAddVehicle("Car", "PhysXCar", pose_);
