@@ -1,4 +1,6 @@
 #include <iostream>
+#include "vehicles/multirotor/api/MultirotorRpcLibClient.hpp"
+#include "vehicles/car/api/CarRpcLibClient.hpp"
 #include <string>
 #include <airsim_ros_wrapper.h>
 #include <ros/ros.h>
@@ -28,7 +30,7 @@ public:
     std::cout << "Car Actor State\n";
 
     // Connessione al simulatore AirSim per il veicolo Car
-    airsim::CarClient client("172.23.32.1", 41451);
+    msr::airlib::CarRpcClient client("172.23.32.1", 41451);
     client.confirmConnection();
     client.enableApiControl(true);
 
@@ -97,7 +99,7 @@ public:
     std::cout << "Drone Actor State\n";
 
     // Connessione al simulatore AirSim per il veicolo Drone
-    airsim::MultirotorClient client("172.23.32.1", 41451);
+    mrs::airlib::MultirotorRpcLibClient client("172.23.32.1", 41451);
     client.confirmConnection();
     client.enableApiControl(true);
 
