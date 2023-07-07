@@ -158,7 +158,8 @@ include_directories(
  target_link_libraries(fsm
    ${catkin_LIBRARIES}
  )
-
+target_link_libraries(${PROJECT_NAME} AirLib)
+target_link_libraries(${PROJECT_NAME} ${RPC_LIB})
 #############
 ## Install ##
 #############
