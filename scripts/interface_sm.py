@@ -44,7 +44,7 @@ class CarMoving(smach.State):
 			client.simDestroyObject('Car')
 			time.sleep(3)
 			print("There should not be anything: ", client.listVehicles())
-			client.simAddVehicle('Multirotor', 'SimpleFlight', self.pose)
+			client.simAddVehicle('SimpleFlight', 'SimpleFlight', self.pose)
 			time.sleep(3)
 			print("There should be a drone: ", client.listVehicles())
 			return 'goal_reached'
@@ -97,8 +97,8 @@ class DroneFlying(smach.State):
 		# Start interface
 		i = input("When the drone is landed, press 'C' to move to another position for sampling: ")
 		if i == 'C' or i == 'c': 
-			self.pose = client.simGetVehiclePose('Multirotor')
-			client.simDestroyObject('Multirotor')
+			self.pose = client.simGetVehiclePose('SimpleFlight')
+			client.simDestroyObject('SimpleFlight')
 			time.sleep(3)
 			print("There should not be anything: ", client.listVehicles())
 			client.simAddVehicle('Car', 'PhysXCar', self.pose)

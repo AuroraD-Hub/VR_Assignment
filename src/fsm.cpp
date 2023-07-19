@@ -1,8 +1,8 @@
 #include <iostream>
-#include "vehicles/multirotor/api/MultirotorRpcLibClient.hpp"
-#include "vehicles/car/api/CarRpcLibClient.hpp"
+#include "AirSim/AirLib/include/vehicles/multirotor/api/MultirotorRpcLibClient.hpp"
+#include "AirSim/AirLib/include/vehicles/car/api/CarRpcLibClient.hpp"
+#include "airsim_ros_wrapper.h"
 #include <string>
-#include <airsim_ros_wrapper.h>
 #include <ros/ros.h>
 #include <geometry_msgs/Pose.h>
 #include <drone_coverage_msgs/LoadCoverageGraph.h>

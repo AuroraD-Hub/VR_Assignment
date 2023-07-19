@@ -9,6 +9,7 @@ project(VR_Assignment)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
   airsim_ros_pkgs
+  AirSim
   nav_msgs
   rospy
   tf
@@ -158,8 +159,8 @@ include_directories(
  target_link_libraries(fsm
    ${catkin_LIBRARIES}
  )
-target_link_libraries(${PROJECT_NAME} AirLib)
-target_link_libraries(${PROJECT_NAME} ${RPC_LIB})
+target_link_libraries(fsm AirLib)
+target_link_libraries(fsm ${RPC_LIB})
 #############
 ## Install ##
 #############
