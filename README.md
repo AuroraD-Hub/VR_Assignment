@@ -88,8 +88,3 @@ Whenever you need to enable it again, do the following steps:
     git config --global --add safe.directory
     ```
 Now your WSL installation should be up and running smooth again.
-
-
-
-
-X AURI: clona questo https://github.com/microsoft/AirSim/tree/main/AirLib
