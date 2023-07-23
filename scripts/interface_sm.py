@@ -10,6 +10,7 @@ import smach
 import smach_ros
 import time
 import json
+from airsim.types import Vector3r, KinematicsState
 from geometry_msgs.msg import Pose
 from drone_coverage_msgs.srv import LoadCoverageGraph, ComputeCoveragePath
 
@@ -21,6 +22,11 @@ class CarMoving(smach.State):
         	smach.State.__init__(self, outcomes=['goal_reached','sampling_done'])
         	rospy.loginfo("Car Actor State")
         	self.pose = Pose()
+        	self.scale = Vector3r()
+        	self.scale.x_val = 1
+        	self.scale.y_val = 1
+        	self.scale.z_val = 1
+        	self.kinematics = KinematicsState()
        
 	def execute(self, userdata):
 		# Connect to the AirSim simulator
@@ -28,7 +34,7 @@ class CarMoving(smach.State):
 		client.confirmConnection()
 		client.enableApiControl(True)
 		
-		print("There should be a car: ", client.listVehicles())
+		print("There should be a car: ", client.listVehicles())	
 	       
 		# Load JSON path file
 		path = dirname(dirname(realpath(__file__)))
@@ -37,26 +43,27 @@ class CarMoving(smach.State):
 			data = json.load(drone_path)
 		
 		# Start interface
-		i = input("Whenever you reach your desired position, press 'D' to arm the drone: ")
+		i = input("Whenever you reach your desired position, press 'D' to spawn the drone: ")
 		if i == 'D' or i == 'd': 
+			# Destroy the car
 			self.pose = client.simGetVehiclePose('Car')
-			self.update_path(path, client, data, self.pose) 
+			self.update_path(path, data, self.pose) 
 			client.simDestroyObject('Car')
 			time.sleep(3)
 			print("There should not be anything: ", client.listVehicles())
-			client.simAddVehicle('SimpleFlight', 'SimpleFlight', self.pose)
+			# Spawn a drone
+			self.spawn_drone(client, self.pose, self.scale, self.kinematics)
 			time.sleep(3)
 			print("There should be a drone: ", client.listVehicles())
 			return 'goal_reached'
 		else:
-			#"./graphs/drone_graph.json"
 			with open(path, "w") as close_file:
 				json.dump(data, close_file, indent=2)
 			return 'sampling_done'
 		
-	def update_path(self, path, client, data, pose):
+	def update_path(self, path, data, pose):
 	# update (x,y) vehicle position
-		print("Car reached position ", (pose.position.x_val, pose.position.y_val), ".")
+		print("Car reached position ", (pose.position.x_val, pose.position.y_val))
 		for i in range(0,4):
 			data["nodes"][f"p{i}"]["position"][0] = pose.position.x_val
 			data["nodes"][f"p{i}"]["position"][1] = pose.position.y_val
@@ -64,6 +71,15 @@ class CarMoving(smach.State):
 			
 		with open(path, "w") as save_path:
 			json.dump(data, save_path, indent=2)
+			
+	def spawn_drone(self, client, pose, scale, kinematics):
+		pawn_path = dirname(dirname(dirname(realpath(__file__))))
+		pawn_path = pawn_path + '/AirSim/Plugins/AirSim/Content/Blueprints/BP_FlyingPawn.uasset'
+		client.simAddVehicle('Drone', 'SimpleFlight', pose, pawn_path)
+		client.simSpawnObject('Drone', 'SimpleFlight', pose, scale, True, True)
+		kinematics.orientation = airsim.to_quaternion(0, 0, 0)
+		kinematics.position = pose
+		client.simSetKinematics(kinematics, False, 'Drone')
 	
 # DRONE_FLYING State
 class DroneFlying(smach.State):
@@ -97,7 +113,7 @@ class DroneFlying(smach.State):
 		# Start interface
 		i = input("When the drone is landed, press 'C' to move to another position for sampling: ")
 		if i == 'C' or i == 'c': 
-			self.pose = client.simGetVehiclePose('SimpleFlight')
+			self.pose = client.simGetVehiclePose('Drone')
 			client.simDestroyObject('SimpleFlight')
 			time.sleep(3)
 			print("There should not be anything: ", client.listVehicles())
