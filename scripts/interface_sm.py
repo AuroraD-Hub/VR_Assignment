@@ -4,6 +4,7 @@ import rospy
 import sys
 import os
 from os.path import dirname, realpath
+import signal
 import setup_path
 import airsim
 import smach
@@ -98,6 +99,8 @@ class DroneFlying(smach.State):
 		
 		print("There should be a drone: ", client.listVehicles())
 		
+		# Launch AirSim Wrapper for the drone
+		wrapper = os.system("gnome-terminal -e 'roslaunch airsim_ros_pkgs airsim_node.launch output:=screen host:=172.23.32.1'")
 		#Stat interface
 		print("Execute './run.py' from VR4R_Assignment")
 		input("Done? If so, press any key to continue.")
@@ -112,6 +115,8 @@ class DroneFlying(smach.State):
 		
 		# Start interface
 		i = input("When the drone is landed, press 'C' to move to another position for sampling: ")
+		# Stop the Wrapper and close related terminal
+		os.kill(wrapper.getppid(), signal.SIGHUP) # gives error
 		if i == 'C' or i == 'c': 
 			self.pose = client.simGetVehiclePose('Drone')
 			client.simDestroyObject('SimpleFlight')
