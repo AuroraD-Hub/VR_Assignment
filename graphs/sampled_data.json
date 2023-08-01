@@ -1,0 +1,17 @@
+{
+	"zone1":{
+		"time": ,
+		"waypoint_p1":{
+			"position": [],
+			"pollution": 
+		},
+		"waypoint_p2":{
+			"position": [],
+			"pollution": 
+		},
+		"waypoint_p3":{
+			"position": [],
+			"pollution": 
+		},
+	}
+}

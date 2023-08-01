@@ -4,12 +4,14 @@ import rospy
 import sys
 import os
 from os.path import dirname, realpath
+import subprocess
 import signal
 import setup_path
 import airsim
 import smach
 import smach_ros
 import time
+import datetime
 import json
 from airsim.types import Vector3r, KinematicsState
 from geometry_msgs.msg import Pose
@@ -99,11 +101,14 @@ class DroneFlying(smach.State):
 		
 		print("There should be a drone: ", client.listVehicles())
 		
-		# Launch AirSim Wrapper for the drone
-		wrapper = os.system("gnome-terminal -e 'roslaunch airsim_ros_pkgs airsim_node.launch output:=screen host:=172.23.32.1'")
-		#Stat interface
-		print("Execute './run.py' from VR4R_Assignment")
-		input("Done? If so, press any key to continue.")
+		# Launch AirSim Wrapper and controller for the drone
+		command = "gnome-terminal -e 'roslaunch airsim_ros_pkgs airsim_node.launch output:=screen host:=172.23.32.1'"
+		wrapper = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+		folder_path = dirname(dirname(dirname(realpath(__file__))))
+		folder_path = folder_path + '/VR4R_Assignment'
+		command = f"gnome-terminal --working-directory={folder_path} -e 'python run.py'"
+		controller = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+		input("Follow the instruction on drone controller terminal, then press any key here.")
 	       
 		# Load JSON graph and path to follow
 		graph = dirname(dirname(realpath(__file__)))
@@ -113,10 +118,17 @@ class DroneFlying(smach.State):
 		client_drone_path = rospy.ServiceProxy('/graph_knowledge/compute_path', ComputeCoveragePath)
 		client_drone_path.call('p0', 'p0')
 		
+		# Start air sampling procedure
+		#path = dirname(dirname(realpath(__file__)))
+		#path = path + '/graphs/sampled_data.json'
+		#with open(path) as air_sampling:
+		#	sampling_data = json.load(air_sampling)
+		#self.sampling(path, sampling_data)
+		
 		# Start interface
 		i = input("When the drone is landed, press 'C' to move to another position for sampling: ")
 		# Stop the Wrapper and close related terminal
-		os.kill(wrapper.getppid(), signal.SIGHUP) # gives error
+		subprocess.Popen("pkill gnome-terminal", shell=True, stdin=subprocess.PIPE)
 		if i == 'C' or i == 'c': 
 			self.pose = client.simGetVehiclePose('Drone')
 			client.simDestroyObject('SimpleFlight')
@@ -128,6 +140,18 @@ class DroneFlying(smach.State):
 			return 'sampling_done'
 		else:
 			return 'goal_reached'
+			
+		#def sampling(self, path, sampling_data):
+		#	sampling_data["zone1"]["time"] = datetime.datetime.now()
+		#	for i in range(1,4):
+		#		self.pose = client.simGetVehiclePose('Drone')
+		#		sampling_data["zone1"][f"waipoint_p{i}"]["position"][0] = pose.position.x_val
+		#		sampling_data["zone1"][f"waipoint_p{i}"]["position"][1] = pose.position.y_val
+		#		sampling_data["zone1"][f"waipoint_p{i}"]["position"][2] = pose.position.z_val
+		#		#sampling_data["sample"][f"waipoint_p{i}"]["pollution"] = 
+		#		
+		#	with open(path, "w") as save_path:
+		#		json.dump(sampling_data, save_path, indent=2)
 	
 
 def main():

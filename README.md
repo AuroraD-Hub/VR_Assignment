@@ -43,14 +43,9 @@ Make sure to build your workspace and source it.
 To correctly visualize the map, make sure that `Sun Position Controller` plugin is enabled in UE. For more details, read UE DOcumentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
 Now everything is set to run the simulation!
 ## Running
-To run the simulation, type in different terminals:
+To run the simulation, type in terminal and follow the instructions given:
 ```
-roslaunch airsim_ros_pkgs airsim_node.launch output:=screen host:=$WSL_HOST_IP
-
 rosrun VR_Assignment interface_sm.py
-
-cd <cloned VR4R_Assignment repo>
-python3 ./run.py
 ```
 ## Troubleshooting
 If you need to temporarly disable the WSL, you can run the following commands to save all your file:  
