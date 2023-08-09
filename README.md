@@ -1,4 +1,5 @@
-# VR_Assignment
+# AMaRa Group
+Here the final assignment for Virtual Reality for Robotics is illustrated.  
 ## Installing 
 First, there is the need of installing and building `AirSim` on Windows by running in your Windows prompt:
 ```
@@ -41,22 +42,33 @@ git clone https://github.com/mmatteo-hub/VR4R_Assignment
 git clone https://github.com/AuroraD-Hub/VR_Assignment
 ```
 Make sure to build your workspace and source it.  
-To correctly visualize the map on Unreal Engine, make sure that `Sun Position Controller` plugin is enabled. For more details, read UE DOcumentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
+To correctly visualize the map on Unreal Engine, make sure that `Sun Position Controller` plugin is enabled. For more details, read UE Documentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
 Now everything is set to run the simulation!
 ## Running
 To run the simulation, type in terminal and follow the instructions given:
 ```
 rosrun VR_Assignment interface_sm.py
 ```
-## Simulation
+---------------------------------------------------------------------------
+# Simulation
 This simulation relies on a Finite State Machine (FMS) and the AirSim API to spawn and delite vehicles based on the specific scope of the vehicle. There are two states: `CarMoving` and `DroneFlying`.  
 It starts in `CarMoving` since AirSim is set up to `Car` SimMode and allows the user to control the vehicle with keyboard around the city to the chosen location in which the drone should sample the air. Once the location is reached, the user has to follow the instruction prompted on the terminal for the FMS to change state. In this way, the FMS saves current position of the car, delete from simulation the vehicle and make the transition to `DroneFlying`.  
 In this second state a drone is spawned in the car last postion saved and two gnome terminals are opened: one for AirSim Wrapper and the other for the drone controller package. Follow the instruction on this last terminal to arm the drone and start the air sampling procedure. Once it is done, these gnome terminals are closed and the user just have to follow the instruction on the main one to make the transition to `CarMoving` again.  
-## Advantages
+## Advantages and limitations
+This project has some advantages with respect to how AirSim is used in literature:
 1. Combining the FSM with AirSim API allows to use AirSim with multiple types of vehicles in the same simulation without the need to re-run it, which is actually not supported by AirSim originally. This is a good achievement since multi-type vehicles is a mode frequently requested from developpers that want to use AirSim to control both cars and multirotors.  
-2. Another advantage is that since the algorithm relies on a FSM, it is possible to use this simulation ideally infinite times by moving around the city with the car and sampling the air with the drone continuosly. In this way, the simulation can also be considered more realistic.  
+2. Another advantage is that since the algorithm relies on a FSM, it is possible to use this simulation ideally infinite times by moving around the city with the car and sampling the air with the drone continuosly. In this way, the simulation can also be considered more realistic.
 
+On the other hand, there are also some limitation:
+1. This approach works well whenever vehicles control is mutual, which means that it works specifically when car and multirotor don't have to be controlled at the same time. In other cases, e.g. Squadron of UAV and Ground Vehicles with SWARM technique, this approach cannot be used.  
+--------------------------------------------------------------------------------------------  
+# Contacts
+Aurora Durante (aurora99durante@gmail.com)  
+Martina Germani ()  
 
+Both developpers are Master Students in [Robotics Engineering](https://corsi.unige.it/en/corsi/10635) in UNIGE, Genoa.
+
+----------------------------------------------------------------------------------------------
 
 ## Troubleshooting
 If you need to temporarly disable the WSL, you can run the following commands to save all your file:  
