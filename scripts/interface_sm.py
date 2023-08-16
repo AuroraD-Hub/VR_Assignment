@@ -13,6 +13,7 @@ import smach_ros
 import time
 import datetime
 import json
+import threading
 from airsim.types import Vector3r, KinematicsState
 from geometry_msgs.msg import Pose
 from drone_coverage_msgs.srv import LoadCoverageGraph, ComputeCoveragePath
@@ -35,10 +36,10 @@ class CarMoving(smach.State):
 		# Connect to the AirSim simulator
 		client = airsim.CarClient(ip="172.23.32.1", port=41451)
 		client.confirmConnection()
-		client.enableApiControl(True)
+#		client.enableApiControl(True)
 		
-		print("There should be a car: ", client.listVehicles())	
-	       
+		print("There should be a car: ", client.listVehicles())
+	        
 		# Load JSON path file
 		path = dirname(dirname(realpath(__file__)))
 		path = path + '/graphs/drone_graph.json'
@@ -83,6 +84,45 @@ class CarMoving(smach.State):
 		kinematics.orientation = airsim.to_quaternion(0, 0, 0)
 		kinematics.position = pose
 		client.simSetKinematics(kinematics, False, 'Drone')
+
+		
+#		path = '/mnt/c/Users/39348/Documents/Unreal Projects/Assignment/SavedData/PollutionData.json' #path to the Unreal Engine Project folder
+#		print("Path trovato")
+#		self.pose = client.simGetVehiclePose('Car') # take current car position
+#		new_position = [self.pose.position.x_val, self.pose.position.y_val, self.pose.position.z_val]
+#		self.update_sampling_data(path, new_position)
+#		time.sleep(3)
+#		return 'sampling_done'
+#
+#	def update_sampling_data(self, path, new_position):
+#		if os.path.exists(path) and os.path.getsize(path) > 0:
+#			with open(path, "r+") as sampling_file:
+#				sampling_data = json.load(sampling_file)
+#		
+#				# Trova l'indice dell'ultima sezione
+#				last_section = sampling_data[-1]
+#			
+#				if "PM25" not in last_section:
+#					print("La chiave PM25 non è presente nella sezione")
+#				if "waypoint" not in last_section:
+#					last_section["waypoint"]={}
+#						
+#				new_waypoint = {
+#					"x": new_position[0],
+#					"y": new_position[1],
+#					"z": new_position[2]
+#				}
+#				last_section["waypoint"] = new_waypoint
+#		
+#				# Sposta il cursore all'inizio del file e sovrascrivi i dati JSON
+#				sampling_file.seek(0)
+#				json.dump(sampling_data, sampling_file, indent=2)
+#				sampling_file.truncate()
+#		
+#				# Chiudi il file
+#				sampling_file.close()
+#		else:
+#          		print("Il file non esiste o è vuoto")
 	
 # DRONE_FLYING State
 class DroneFlying(smach.State):
@@ -97,7 +137,7 @@ class DroneFlying(smach.State):
 		# Connect to the AirSim simulator
 		client = airsim.MultirotorClient(ip="172.23.32.1", port=41451)
 		client.confirmConnection()
-		client.enableApiControl(True)
+#		client.enableApiControl(True)
 		
 		print("There should be a drone: ", client.listVehicles())
 		
@@ -119,11 +159,11 @@ class DroneFlying(smach.State):
 		client_drone_path.call('p0', 'p0')
 		
 		# Start air sampling procedure
-		#path = dirname(dirname(realpath(__file__)))
-		#path = path + '/graphs/sampled_data.json'
-		#with open(path) as air_sampling:
-		#	sampling_data = json.load(air_sampling)
-		#self.sampling(path, sampling_data)
+#		path = '/mnt/c/Users/39348/Documents/Unreal Projects/Assignment/SavedData/PollutionData.json' 
+#		self.pose = client.simGetVehiclePose('Drone') # take current drone position
+#		new_position = [self.pose.position.x_val, self.pose.position.y_val, self.pose.position.z_val]
+#		self.update_sampling_data(path, new_position)
+#		time.sleep(3)
 		
 		# Start interface
 		i = input("When the drone is landed, press 'C' to move to another position for sampling: ")
@@ -131,7 +171,7 @@ class DroneFlying(smach.State):
 		subprocess.Popen("pkill gnome-terminal", shell=True, stdin=subprocess.PIPE)
 		if i == 'C' or i == 'c': 
 			self.pose = client.simGetVehiclePose('Drone')
-			client.simDestroyObject('SimpleFlight')
+			client.simDestroyObject('Drone')
 			time.sleep(3)
 			print("There should not be anything: ", client.listVehicles())
 			client.simAddVehicle('Car', 'PhysXCar', self.pose)
@@ -141,17 +181,35 @@ class DroneFlying(smach.State):
 		else:
 			return 'goal_reached'
 			
-		#def sampling(self, path, sampling_data):
-		#	sampling_data["zone1"]["time"] = datetime.datetime.now()
-		#	for i in range(1,4):
-		#		self.pose = client.simGetVehiclePose('Drone')
-		#		sampling_data["zone1"][f"waipoint_p{i}"]["position"][0] = pose.position.x_val
-		#		sampling_data["zone1"][f"waipoint_p{i}"]["position"][1] = pose.position.y_val
-		#		sampling_data["zone1"][f"waipoint_p{i}"]["position"][2] = pose.position.z_val
-		#		#sampling_data["sample"][f"waipoint_p{i}"]["pollution"] = 
-		#		
-		#	with open(path, "w") as save_path:
-		#		json.dump(sampling_data, save_path, indent=2)
+#	def update_sampling_data(self, path, new_position):
+#		if os.path.exists(path) and os.path.getsize(path) > 0:
+#			with open(path, "r+") as sampling_file:
+#				sampling_data = json.load(sampling_file)
+#		
+#				# Trova l'indice dell'ultima sezione
+#				last_section = sampling_data[-1]
+#			
+#				if "PM25" not in last_section:
+#					print("La chiave PM25 non è presente nella sezione")
+#				if "waypoint" not in last_section:
+#					last_section["waypoint"]={}
+#						
+#				new_waypoint = {
+#					"x": new_position[0],
+#					"y": new_position[1],
+#					"z": new_position[2]
+#				}
+#				last_section["waypoint"] = new_waypoint
+#		
+#				# Sposta il cursore all'inizio del file e sovrascrivi i dati JSON
+#				sampling_file.seek(0)
+#				json.dump(sampling_data, sampling_file, indent=2)
+#				sampling_file.truncate()
+#		
+#				# Chiudi il file
+#				sampling_file.close()
+#		else:
+#          		print("Il file non esiste o è vuoto")
 	
 
 def main():
@@ -171,10 +229,10 @@ def main():
     # Open the container
     with sm:
         # Add states to the container
-        smach.StateMachine.add('CAR_MOVING', CarMoving(),
+        smach.StateMachine.add('DRONE_FLYING', DroneFlying(),
                                transitions={'goal_reached':'DRONE_FLYING',
                                             'sampling_done':'CAR_MOVING'})
-        smach.StateMachine.add('DRONE_FLYING', DroneFlying(),
+        smach.StateMachine.add('CAR_MOVING', CarMoving(),
                                transitions={'goal_reached':'DRONE_FLYING',
                                             'sampling_done':'CAR_MOVING'})
 
