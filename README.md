@@ -47,7 +47,7 @@ Now everything is set to run the simulation!
 ## Running
 To run the simulation, type in terminal and follow the instructions given:
 ```
-rosrun VR_Assignment interface_sm.py
+roslaunch VR_Assignment pollution_monitoring.launch host:=$WSL_HOST_IP
 ```
 ---------------------------------------------------------------------------
 # Simulation
