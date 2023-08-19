@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <launch>
 		
-	<include file="$(find airsim_ros_pkgs)/launch/airsim_node.launch">
-		<arg name="output" value="screen" />
-		<arg name="host" value="172.23.32.1" />
-	</include>
-   	<node name="interface" pkg="VR_Assignment" type="interface_sm.py" launch-prefix="gnome-terminal -e"/>
-   	<include file="$(find VR_Assignment)/run.py">
-		<arg name="output" value="gnome-terminal -e" />
-	</include>
+	<arg name="host" default="172.23.32.1" />
+	
+   	<node name="interface" pkg="VR_Assignment" type="interface_sm.py" output="screen"/>
+   	<node name="spawner" pkg="VR_Assignment" type="spawner.py" output="screen">
+   		<param name="host" type="string" value="$(arg host)" />
+   	</node>
+   	<node name="launcher" pkg="VR_Assignment" type="launcher.py" output="screen">
+   		<param name="host" type="string" value="$(arg host)" />
+   	</node>
 
 </launch>
