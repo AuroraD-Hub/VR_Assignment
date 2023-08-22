@@ -1,0 +1,5 @@
+string command
+int64 n
+-----
+float64 AQHI
+bool succes

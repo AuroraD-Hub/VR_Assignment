@@ -64,6 +64,7 @@ find_package(catkin REQUIRED COMPONENTS
    FILES
    Spawner_srv.srv
    Launcher_srv.srv
+   AQHICalculator_srv.srv
  )
 
 ## Generate actions in the 'action' folder

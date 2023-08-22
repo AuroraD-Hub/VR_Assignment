@@ -8,7 +8,6 @@ import os
 from os.path import dirname, realpath
 import json
 import time
-#from geometry_msgs.msg import Pose
 from airsim.types import Pose, Vector3r, KinematicsState
 from VR_Assignment.srv import Spawner_srv, Spawner_srvResponse
 
