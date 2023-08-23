@@ -3,3 +3,4 @@ int64 n
 -----
 float64 AQHI
 bool succes
+string msg

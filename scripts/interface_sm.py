@@ -36,6 +36,7 @@ class CarMoving(smach.State):
 			req_calculator.n = self.n
 			res_calculator = client_calculator.call(req_calculator)
 			print("The AQHI is: ", res_calculator.AQHI)
+			print(res_calculator.msg)
 			req_spawner.vehicle = 'Car'
 			client_spawner.call(req_spawner)
 			print("Time to sample!")

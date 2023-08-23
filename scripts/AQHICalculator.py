@@ -43,7 +43,9 @@ def handle_calculator(req):
 	elif req.command == 'calculate': 
 		print('Get Index')
 		AQHI = getAQHI(path, n)
+		msg = getHealthMessage(AQHI)
 		res.AQHI = AQHI
+		res.msg = msg
 		print('AQHI is calculated!')
 		res.succes = True
 	else:
@@ -247,7 +249,19 @@ def getPollutantIndex(aqhi, string)
 				return 9
 			else:
 				return 10
-		
+
+def getHealthMessage(AQHI):
+	if AQHI>1 and AQHI<3 or AQHI=1 or AQHI=3:
+		return "For at-risk individuals: enjoy your usual outdoor activities."
+	elif AQHI>4 and AQHI<6 or AQHI=4 or AQHI=6:
+		return "For at-risk individuals: adults and children with lung problems, and adults with heart problems, who experience symptoms, should consider reducing strenuous physical activity, particularly outdoors."
+	elif AQHI>7 and AQHI<9 or AQHI=7 or AQHI=9:
+		return "For at-risk individuals: adults and children with lung problems, and adults with heart problems, should reduce strenuous physical exertion, particularly outdoors, and particularly if they experience symptoms. People with asthma may find they need to use their reliever inhaler more often. Older people should also reduce physical exertion."
+	elif AQHI=10:
+		return "For at-risk individuals: adults and children with lung problems, adults with heart problems, and older people, should avoid strenuous physical activity. People with asthma may find they need to use their reliever inhaler more often."
+	else:
+		return "Error in computing the index"
+	
 
 if __name__ == '__main__':
     # Instantiate the node manager service and wait.
