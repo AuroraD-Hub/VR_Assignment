@@ -20,7 +20,7 @@ class CarMoving(smach.State):
         #Here, CarMoving state is initialized.
         	smach.State.__init__(self, outcomes=['goal_reached','sampling_done'])
         	rospy.loginfo("Car Actor State")
-        	self.n = 1 # move to Drone State
+        	self.n = 0 # move to Drone State
 
 	def execute(self, userdata):
 		# Start interface
@@ -33,7 +33,7 @@ class CarMoving(smach.State):
 		i = input("Whenever you reach your desired position, press 'D' to spawn the drone: ")
 		if i == 'D' or i == 'd': 
 			req_calculator.command = 'calculate'
-			req_calculator.n = self.n-1
+			req_calculator.n = self.n
 			res_calculator = client_calculator.call(req_calculator)
 			print("The AQHI is: ", res_calculator.AQHI)
 			req_spawner.vehicle = 'Car'
@@ -52,6 +52,7 @@ class DroneFlying(smach.State):
         #Here, DroneFlying state is initialized.
         	smach.State.__init__(self, outcomes=['goal_reached','sampling_done'])
         	rospy.loginfo("Drone Actor State")
+#        	self.n = 0
        
 	def execute(self, userdata):
 		# Start drone controller
@@ -69,7 +70,7 @@ class DroneFlying(smach.State):
 		client_launcher.call(req_launcher)
 		# Get AQHI
 #		req_calculator.command = 'calculate'
-#		req_calculator.n = self.n-1
+#		req_calculator.n = self.n
 #		res_calculator = client_calculator.call(req_calculator)
 #		print("The AQHI is: ", res_calculator.AQHI)
 		if i == 'C' or i == 'c': 
