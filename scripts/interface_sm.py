@@ -16,34 +16,35 @@ res_calculator = AQHICalculator_srvResponse()
 # CAR_MOVING State
 class CarMoving(smach.State):
 
-	def __init__(self):
-        #Here, CarMoving state is initialized.
-        	smach.State.__init__(self, outcomes=['goal_reached','sampling_done'])
-        	rospy.loginfo("Car Actor State")
-        	self.n = 0 # move to Drone State
+    def __init__(self):
+        smach.State.__init__(self, outcomes=['goal_reached', 'sampling_done'])
+        rospy.loginfo("Car Actor State")
+        self.n = 1
 
-	def execute(self, userdata):
-		# Start interface
-		## ogni volta che il blocco viene colliso, aggiorna
-		req_calculator.command = 'update'
-		req_calculator.n = self.n
-		client_calculator.call(req_calculator)
-		self.n = self.n+1
-		
-		i = input("Whenever you reach your desired position, press 'D' to spawn the drone: ")
-		if i == 'D' or i == 'd': 
-			req_calculator.command = 'calculate'
-			req_calculator.n = self.n
-			res_calculator = client_calculator.call(req_calculator)
-			print("The AQHI is: ", res_calculator.AQHI)
-			print(res_calculator.msg)
-			req_spawner.vehicle = 'Car'
-			client_spawner.call(req_spawner)
-			print("Time to sample!")
-			return 'goal_reached'
-		else:
-			print("You chose to reach another position")
-			return 'sampling_done'
+        # Crea un timer che richiama la funzione di aggiornamento ogni 5 secondi
+        self.update_timer = rospy.Timer(rospy.Duration(2), self.update)
+
+    def update(self, event):
+        req_calculator.command = 'update'
+        req_calculator.n = self.n
+        client_calculator.call(req_calculator)
+        self.n = self.n + 1
+
+    def execute(self, userdata):
+        i = input("Whenever you reach your desired position, press 'D' to spawn the drone: ")
+        if i == 'D' or i == 'd':
+            req_calculator.command = 'calculate'
+            req_calculator.n = self.n
+            res_calculator = client_calculator.call(req_calculator)
+            print("The AQHI is: ", res_calculator.AQHI)
+            print(res_calculator.msg)
+            req_spawner.vehicle = 'Car'
+            client_spawner.call(req_spawner)
+            print("Time to sample!")
+            return 'goal_reached'
+        else:
+            print("You chose to reach another position")
+            return 'sampling_done'
 		
 		
 # DRONE_FLYING State
@@ -125,3 +126,9 @@ def main():
 
 if __name__ == '__main__':
     main()
+    
+    
+    
+    
+    
+    
