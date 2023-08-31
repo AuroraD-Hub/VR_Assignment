@@ -10,6 +10,8 @@
    	<node name="launcher" pkg="VR_Assignment" type="launcher.py" output="screen">
    		<param name="host" type="string" value="$(arg host)" />
    	</node>
-   	<node name="AQHI_calculator" pkg="VR_Assignment" type="AQHICalculator.py" output="screen"/>
+   	<node name="calculator" pkg="VR_Assignment" type="AQHICalculator.py" output="screen">
+   		<param name="host" type="string" value="$(arg host)" />
+   	</node>
 
 </launch>

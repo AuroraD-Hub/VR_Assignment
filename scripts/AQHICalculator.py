@@ -55,7 +55,8 @@ def handle_calculator(req):
 	
 def update_sampling_data(path, n):
 	pose = Pose()
-	client = airsim.CarClient(ip="172.23.32.1", port=41451) # change into Multirotor
+	host = rospy.get_param("/calculator/host") # launch param
+	client = airsim.CarClient(ip=host, port=41451) # change into Multirotor
 	pose = client.simGetVehiclePose('Car') # change into Drone
 	new_position = [pose.position.x_val, pose.position.y_val, pose.position.z_val]
 
