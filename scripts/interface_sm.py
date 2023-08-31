@@ -21,7 +21,7 @@ class CarMoving(smach.State):
         rospy.loginfo("Car Actor State")
         self.n = 1
 
-        # Crea un timer che richiama la funzione di aggiornamento ogni 5 secondi
+        # Create a timer to control if updating pollution file is necessary
         self.update_timer = rospy.Timer(rospy.Duration(2), self.update)
 
     def update(self, event):
