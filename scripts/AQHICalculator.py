@@ -34,7 +34,7 @@ def handle_calculator(req):
 	"""
 	
 	res = AQHICalculator_srvResponse()
-	path = '/mnt/d/VR_Assignment/Assignment/SavedData/PollutionData.json' #path to the Unreal Engine Project folder
+	path = '/mnt/c/Users/39348/Documents/Unreal Projects/Assignment/SavedData/PollutionData.json' #path to the Unreal Engine Project folder
 	if req.command == 'update': 
 		print('Updating file')
 		update_sampling_data(path, req.n)
@@ -59,17 +59,14 @@ def update_sampling_data(path, n):
 	client = airsim.CarClient(ip=host, port=41451) # change into Multirotor
 	pose = client.simGetVehiclePose('Car') # change into Drone
 	new_position = [pose.position.x_val, pose.position.y_val, pose.position.z_val]
-	print("sono dentro update_sampling_data")
 
 	if os.path.exists(path) and os.path.getsize(path) > 0:
 		with open(path, "r+") as sampling_file:
 			sampling_data = json.load(sampling_file)
-			print("file caricato")
 			# Find index of the last section
 			last_section = sampling_data[-1]
 			if n == 0:
 				del last_section
-				print("n=0, delete")
 			else:
 				if "PM25" not in last_section:
 					print("Key PM25 is not present.")
@@ -83,7 +80,6 @@ def update_sampling_data(path, n):
 				}
 				last_section["waypoint"] = new_waypoint
 				last_section["N"] = n
-				print("modifiche fatte")
 				# Move the cursor to the start of the file and update the file
 				sampling_file.seek(0)
 				json.dump(sampling_data, sampling_file, indent=2)
@@ -117,6 +113,8 @@ def getNowCast(path, n, string):
 	den = 0
 	for i in data:
 		pol.append(i.get(string, 0))
+	pol_min = min(pol)
+	pol_max = max(pol)
 	w_star = pol_min/pol_max
 	if w_star > 0.5:
 		w = w_star
@@ -253,7 +251,8 @@ def getPollutantIndex(aqhi, string):
             return 9
         else:
             return 10
-
+    else:
+	    print(f"Pollutant {string} is not valid.")
 
 
 def getHealthMessage(AQHI):
