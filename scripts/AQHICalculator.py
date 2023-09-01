@@ -37,7 +37,7 @@ def handle_calculator(req):
 	path = '/mnt/c/Users/39348/Documents/Unreal Projects/Assignment/SavedData/PollutionData.json' #path to the Unreal Engine Project folder
 	if req.command == 'update': 
 		print('Updating file')
-		update_sampling_data(path, req.n)
+		update_sampling_data(path, req.n, res)
 		print('File updated')
 		res.succes = True
 	elif req.command == 'calculate': 
@@ -53,7 +53,7 @@ def handle_calculator(req):
 		res.succes = False
 	return res
 	
-def update_sampling_data(path, n):
+def update_sampling_data(path, n, res):
 	pose = Pose()
 	host = rospy.get_param("/calculator/host") # launch param
 	client = airsim.CarClient(ip=host, port=41451) # change into Multirotor
@@ -65,14 +65,13 @@ def update_sampling_data(path, n):
 			sampling_data = json.load(sampling_file)
 			# Find index of the last section
 			last_section = sampling_data[-1]
-			if n == 0:
+			if "PM25" not in last_section:
+				print("Key PM25 is not present.")
+			if "N" in last_section == 0:
 				del last_section
-			else:
-				if "PM25" not in last_section:
-					print("Key PM25 is not present.")
-				if "waypoint" not in last_section:
-					last_section["waypoint"]={}
-						
+				res.n = 1
+			if "N" not in last_section:
+				last_section["waypoint"]={}
 				new_waypoint = {
 					"x": new_position[0],
 					"y": new_position[1],
@@ -80,13 +79,16 @@ def update_sampling_data(path, n):
 				}
 				last_section["waypoint"] = new_waypoint
 				last_section["N"] = n
-				# Move the cursor to the start of the file and update the file
-				sampling_file.seek(0)
-				json.dump(sampling_data, sampling_file, indent=2)
-				sampling_file.truncate()
-		
-				# Close the file
-				sampling_file.close()
+				res.n = n+1
+			else:
+				res.n = n
+			# Move the cursor to the start of the file and update the file
+			sampling_file.seek(0)
+			json.dump(sampling_data, sampling_file, indent=2)
+			sampling_file.truncate()
+	
+			# Close the file
+			sampling_file.close()
 	else:
   		print("File does not exist or is empty.")
   		

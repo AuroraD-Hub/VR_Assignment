@@ -19,7 +19,7 @@ class CarMoving(smach.State):
     def __init__(self):
         smach.State.__init__(self, outcomes=['goal_reached', 'sampling_done'])
         rospy.loginfo("Car Actor State")
-        self.n = 1
+        self.n = 0
 
         # Create a timer to control if updating pollution file is necessary
         self.update_timer = rospy.Timer(rospy.Duration(2), self.update)
@@ -27,8 +27,8 @@ class CarMoving(smach.State):
     def update(self, event):
         req_calculator.command = 'update'
         req_calculator.n = self.n
-        client_calculator.call(req_calculator)
-        self.n = self.n + 1
+        res_calculator = client_calculator.call(req_calculator)
+        self.n = res_calculator.n
 
     def execute(self, userdata):
         i = input("Whenever you reach your desired position, press 'D' to spawn the drone: ")

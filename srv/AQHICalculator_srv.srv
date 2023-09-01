@@ -1,6 +1,7 @@
 string command
 int64 n
 -----
+int64 n
 float64 AQHI
-bool succes
 string msg
+bool succes
