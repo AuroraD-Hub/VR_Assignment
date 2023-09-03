@@ -68,7 +68,7 @@ def car_api(vehicle,host):
 	
 def drone_api(vehicle,host):
 	# Connect to the AirSim simulator
-	client = airsim.MultirotorClient(ip=host, port=41452)
+	client = airsim.MultirotorClient(ip=host, port=41451)
 	client.confirmConnection()
 	
 	print("There should be a drone: ", client.listVehicles())
@@ -109,16 +109,16 @@ def spawn_new_vehicle(vehicle,host,new_client):
 	if vehicle == 'Car': # Spawn a drone
 		name = 'Drone'
 		vehicle_type = 'SimpleFlight'
-		#print("Connecting to drone client")
-		#new_client = airsim.MultirotorClient(ip=host, port=41452)
-		#new_client.confirmConnection()
+		print("Connecting to drone client")
+		new_client = airsim.MultirotorClient(ip=host, port=41451)
+		new_client.confirmConnection()
 		print("Spawning Drone")
 	elif vehicle == 'Drone': # Spawn a car
 		name = 'Car'
 		vehicle_type = 'PhysXCar'
-		#print("Connecting to car client")
-		#new_client = airsim.CarClient(ip=host, port=41451)
-		#new_client.confirmConnection()
+		print("Connecting to car client")
+		new_client = airsim.CarClient(ip=host, port=41451)
+		new_client.confirmConnection()
 		print("Spawning Car")
 	else:
 		print('Cannot spawn unknown vehicle')
