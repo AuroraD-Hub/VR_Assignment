@@ -13,7 +13,7 @@ Once it is done, go into the `AirSim` folder in `Documents` and modify the `sett
     "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/main/docs/settings.md",
     "SettingsVersion": 1.2,
     "SimMode": "Car",
-    "LocalHostIp": "172.23.32.1",
+    "LocalHostIp": "insert_your_ip_here",
     "ApiServerPort": 41451,
     "Vehicles": {
       "Car": {
@@ -45,10 +45,12 @@ Make sure to build your workspace and source it.
 To correctly visualize the map on Unreal Engine, make sure that `Sun Position Controller` plugin is enabled. For more details, read UE Documentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
 Now everything is set to run the simulation!
 ## Running
-To run the simulation, type in terminal and follow the instructions given:
+To run this solution, first play the simulation on UE and then type in terminal:
 ```
 roslaunch VR_Assignment pollution_monitoring.launch host:=$WSL_HOST_IP
 ```
+Follow the instruction given and enjoy your Smart City!
+
 ---------------------------------------------------------------------------
 # Simulation
 This simulation relies on a Finite State Machine (FMS) and the AirSim API to spawn and delite vehicles based on the specific scope of the vehicle. There are two states: `CarMoving` and `DroneFlying`.  
