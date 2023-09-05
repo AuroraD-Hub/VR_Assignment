@@ -63,8 +63,28 @@ def car_api(vehicle,host):
 	
 	print("There should be a car: ", client.listVehicles())
 	
-	destroy_vehicle(vehicle, client)
-	spawn_new_vehicle(vehicle,host,client)
+	# Load JSON path file
+	path = dirname(dirname(realpath(__file__)))
+	path = path + '/graphs/drone_graph.json'
+	with open(path) as drone_path:
+		data = json.load(drone_path)
+	
+	# Save last position
+	pose = client.simGetVehiclePose(vehicle)
+	print("Car reached position ", (pose.position.x_val, pose.position.y_val))
+	for i in range(0,4): ## questo è necessario per poi dare al drone il path da seguire
+		data["nodes"][f"p{i}"]["position"][0] = pose.position.x_val
+		data["nodes"][f"p{i}"]["position"][1] = pose.position.y_val
+		data["nodes"][f"p{i}"]["position"][2] = pose.position.z_val+i*10
+		
+	with open(path, "w") as save_path:
+		json.dump(data, save_path, indent=2)
+	
+	spawn_new_vehicle(vehicle,host)
+	print("List all vehicles: ", client.listVehicles())
+	client.simDestroyObject(vehicle)
+	print("There should be only a drone: ", client.listVehicles()) ## quando destroy veniva eseguito prima di spawn qui risultava comunque ancora Car
+	#destroy_vehicle(vehicle, client)
 	
 def drone_api(vehicle,host):
 	# Connect to the AirSim simulator
@@ -73,39 +93,46 @@ def drone_api(vehicle,host):
 	
 	print("There should be a drone: ", client.listVehicles())
 	
-	destroy_vehicle(vehicle, client)
+	# Save last position
+	pose = client.simGetVehiclePose(vehicle)
+	print("Drone is in position ", (pose.position.x_val, pose.position.y_val))
+	
 	spawn_new_vehicle(vehicle,host)
-	
-	
-def destroy_vehicle(vehicle, client):
-	if vehicle == 'Car':
-		# Load JSON path file
-		path = dirname(dirname(realpath(__file__)))
-		path = path + '/graphs/drone_graph.json'
-		with open(path) as drone_path:
-			data = json.load(drone_path)
-		
-		# Save last position
-		pose = client.simGetVehiclePose(vehicle)
-		print("Car reached position ", (pose.position.x_val, pose.position.y_val))
-		for i in range(0,4):
-			data["nodes"][f"p{i}"]["position"][0] = pose.position.x_val
-			data["nodes"][f"p{i}"]["position"][1] = pose.position.y_val
-			data["nodes"][f"p{i}"]["position"][2] = pose.position.z_val+i*10
-			
-		with open(path, "w") as save_path:
-			json.dump(data, save_path, indent=2)
-	elif vehicle == 'Drone':
-		# Save last position
-		pose = client.simGetVehiclePose(vehicle)		
-	else:
-		print('Cannot delete unknown vehicles')
-	
-	# Destroy the vehicle
+	print("List all vehicles: ", client.listVehicles())
 	client.simDestroyObject(vehicle)
-	print("There should not be anything: ", client.listVehicles())
+	print("There should be only a car: ", client.listVehicles())
+	#destroy_vehicle(vehicle, client)
+	
+	
+#def destroy_vehicle(vehicle, client):
+#	if vehicle == 'Car':
+#		# Load JSON path file
+#		path = dirname(dirname(realpath(__file__)))
+#		path = path + '/graphs/drone_graph.json'
+#		with open(path) as drone_path:
+#			data = json.load(drone_path)
+#		
+#		# Save last position
+#		pose = client.simGetVehiclePose(vehicle)
+#		print("Car reached position ", (pose.position.x_val, pose.position.y_val))
+#		for i in range(0,4):
+#			data["nodes"][f"p{i}"]["position"][0] = pose.position.x_val
+#			data["nodes"][f"p{i}"]["position"][1] = pose.position.y_val
+#			data["nodes"][f"p{i}"]["position"][2] = pose.position.z_val+i*10
+#			
+#		with open(path, "w") as save_path:
+#			json.dump(data, save_path, indent=2)
+#	elif vehicle == 'Drone':
+#		# Save last position
+#		pose = client.simGetVehiclePose(vehicle)		
+#	else:
+#		print('Cannot delete unknown vehicles')
+#	
+#	# Destroy the vehicle
+#	client.simDestroyObject(vehicle)
+#	print("There should not be anything: ", client.listVehicles()) 
 		
-def spawn_new_vehicle(vehicle,host,new_client):
+def spawn_new_vehicle(vehicle,host):
 	if vehicle == 'Car': # Spawn a drone
 		name = 'Drone'
 		vehicle_type = 'SimpleFlight'
@@ -126,7 +153,7 @@ def spawn_new_vehicle(vehicle,host,new_client):
 	print("1")
 	new_client.simAddVehicle(name, vehicle_type, pose, '')
 	print("2")
-	vehicle_name = new_client.simSpawnObject(name, vehicle_type, pose, scale, True, True)
+	vehicle_name = new_client.simSpawnObject(name, vehicle_type, pose, scale, True, True) ## qui UE va in crash e non vedo più nessun comando eseguito dopo sul terminale
 	print("3")
 	kinematics.orientation = airsim.to_quaternion(0, 0, 0)
 	kinematics.position = pose

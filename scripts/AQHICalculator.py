@@ -36,16 +36,12 @@ def handle_calculator(req):
 	res = AQHICalculator_srvResponse()
 	path = '/mnt/c/Users/39348/Documents/Unreal Projects/Assignment/SavedData/PollutionData.json' #path to the Unreal Engine Project folder
 	if req.command == 'update': 
-		print('Updating file')
 		update_sampling_data(path, req.n, res)
-		print('File updated')
 		res.succes = True
 	elif req.command == 'calculate': 
-		print('Get Index')
-		AQHI = getAQHI(path, req.n)
-		msg = getHealthMessage(AQHI)
-		res.AQHI = AQHI
-		res.msg = msg
+		print('Getting Index')
+		res.AQHI = getAQHI(path, req.n)
+		res.msg = getHealthMessage(res.AQHI)
 		print('AQHI is calculated!')
 		res.succes = True
 	else:
@@ -71,6 +67,7 @@ def update_sampling_data(path, n, res):
 				del last_section
 				res.n = 1
 			if "N" not in last_section:
+				print('Updating file')
 				last_section["waypoint"]={}
 				new_waypoint = {
 					"x": new_position[0],
@@ -80,6 +77,7 @@ def update_sampling_data(path, n, res):
 				last_section["waypoint"] = new_waypoint
 				last_section["N"] = n
 				res.n = n+1
+				print('File updated')
 			else:
 				res.n = n
 			# Move the cursor to the start of the file and update the file

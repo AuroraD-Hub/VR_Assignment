@@ -55,30 +55,35 @@ class DroneFlying(smach.State):
         	smach.State.__init__(self, outcomes=['goal_reached','sampling_done'])
         	rospy.loginfo("Drone Actor State")
 #        	self.n = 0
-       
+
+	# Create a timer to control if updating pollution file is necessary
+#        self.update_timer = rospy.Timer(rospy.Duration(2), self.update)
+
+	def update(self, event):
+		req_calculator.command = 'update'
+		req_calculator.n = self.n
+		res_calculator = client_calculator.call(req_calculator)
+		self.n = res_calculator.n
+	       
 	def execute(self, userdata):
 		# Start drone controller
 		req_launcher.command = 'open'
 		client_launcher.call(req_launcher)
 		
-#		# Keep updating sampling file
-#		req_calculator.command = 'update'
-#		req_calculator.n = self.n
-#		client_calculator.call(req_calculator)
-#		self.n = self.n+1
-		
-		i = input("When the drone is landed, press 'C' to move to another position for sampling: ")
+		i = input("When the drone is landed, press 'C' to move to another position for sampling or 'X' to get the AQHI and close the simulation: ")
 		req_launcher.command = 'close'
 		client_launcher.call(req_launcher)
-		# Get AQHI
-#		req_calculator.command = 'calculate'
-#		req_calculator.n = self.n
-#		res_calculator = client_calculator.call(req_calculator)
-#		print("The AQHI is: ", res_calculator.AQHI)
 		if i == 'C' or i == 'c': 
 			req_spawner.vehicle = 'Drone'
 			client_spawner.call(req_spawner)
 			return 'sampling_done'
+		elif i == 'X' or i == 'x':
+			# Get AQHI
+			req_calculator.command = 'calculate'
+			req_calculator.n = self.n
+			res_calculator = client_calculator.call(req_calculator)
+			print("The AQHI is: ", res_calculator.AQHI)
+			print(res_calculator.msg)
 		else:
 			return 'goal_reached'
 	
