@@ -11,7 +11,7 @@ import time
 from airsim.types import Pose, Vector3r, KinematicsState
 from VR_Assignment.srv import Spawner_srv, Spawner_srvResponse
 
-pose = Pose()
+pos = Pose()
 scale = Vector3r()
 scale.x_val = 1
 scale.y_val = 1
@@ -70,12 +70,14 @@ def car_api(vehicle,host):
 		data = json.load(drone_path)
 	
 	# Save last position
-	pose = client.simGetVehiclePose(vehicle)
-	print("Car reached position ", (pose.position.x_val, pose.position.y_val))
+	#pos = client.simGetVehiclePose(vehicle)
+	print("Posizione con GetVehiclePose: ", client.simGetVehiclePose(vehicle))
+	pos = client.getCarState().kinematics_estimated.position
+	print("Car reached position ", (pos.x_val, pos.y_val, pos.z_val))
 	for i in range(0,4): ## questo è necessario per poi dare al drone il path da seguire
-		data["nodes"][f"p{i}"]["position"][0] = pose.position.x_val
-		data["nodes"][f"p{i}"]["position"][1] = pose.position.y_val
-		data["nodes"][f"p{i}"]["position"][2] = pose.position.z_val+i*10
+		data["nodes"][f"p{i}"]["position"][0] = pos.x_val
+		data["nodes"][f"p{i}"]["position"][1] = pos.y_val
+		data["nodes"][f"p{i}"]["position"][2] = pos.z_val+i*10
 		
 	with open(path, "w") as save_path:
 		json.dump(data, save_path, indent=2)
@@ -94,8 +96,10 @@ def drone_api(vehicle,host):
 	print("There should be a drone: ", client.listVehicles())
 	
 	# Save last position
-	pose = client.simGetVehiclePose(vehicle)
-	print("Drone is in position ", (pose.position.x_val, pose.position.y_val))
+	#pos = client.simGetVehiclePose(vehicle)
+	data_gps = client.getGpsData(gps_name = "", vehicle_name = "")
+	pos = pm.geodetic2ned(data_gps.gnss.geo_point.latitude, data_gps.gnss.geo_point.longitude, data_gps.gnss.geo_point.altitude, 0, 0, 0)
+	print("Drone is in position ", (pos[0], pos[1], pos[2]))
 	
 	spawn_new_vehicle(vehicle,host)
 	print("List all vehicles: ", client.listVehicles())
@@ -139,6 +143,8 @@ def spawn_new_vehicle(vehicle,host):
 		print("Connecting to drone client")
 		new_client = airsim.MultirotorClient(ip=host, port=41451)
 		new_client.confirmConnection()
+		new_client.armDisarm(True)
+		new_client.takeoffAsync().join()
 		print("Spawning Drone")
 	elif vehicle == 'Drone': # Spawn a car
 		name = 'Car'
@@ -151,12 +157,12 @@ def spawn_new_vehicle(vehicle,host):
 		print('Cannot spawn unknown vehicle')
 	
 	print("1")
-	new_client.simAddVehicle(name, vehicle_type, pose, '')
+	new_client.simAddVehicle(name, vehicle_type, pos, '')
 	print("2")
-	vehicle_name = new_client.simSpawnObject(name, vehicle_type, pose, scale, True, True) ## qui UE va in crash e non vedo più nessun comando eseguito dopo sul terminale
+	vehicle_name = new_client.simSpawnObject(name, vehicle_type, pos, scale, True, True) ## qui UE va in crash e non vedo più nessun comando eseguito dopo sul terminale
 	print("3")
 	kinematics.orientation = airsim.to_quaternion(0, 0, 0)
-	kinematics.position = pose
+	kinematics.position = pos
 	new_client.simSetKinematics(kinematics, False, vehicle_name)
 	print("4")
 	time.sleep(5)

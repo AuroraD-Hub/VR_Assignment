@@ -9,6 +9,8 @@ import time
 import math
 import json
 import threading
+import pymap3d as pm
+import navpy
 from airsim.types import Pose
 from VR_Assignment.srv import AQHICalculator_srv, AQHICalculator_srvResponse
 
@@ -52,9 +54,9 @@ def handle_calculator(req):
 def update_sampling_data(path, n, res):
 	pose = Pose()
 	host = rospy.get_param("/calculator/host") # launch param
-	client = airsim.CarClient(ip=host, port=41451) # change into Multirotor
-	pose = client.simGetVehiclePose('Car') # change into Drone
-	new_position = [pose.position.x_val, pose.position.y_val, pose.position.z_val]
+	client = airsim.MultirotorClient(ip=host, port=41451)
+	data = client.getGpsData(gps_name = "", vehicle_name = "")
+	new_position = pm.geodetic2ned(data.gnss.geo_point.latitude, data.gnss.geo_point.longitude, data.gnss.geo_point.altitude, 0, 0, 0)
 
 	if os.path.exists(path) and os.path.getsize(path) > 0:
 		with open(path, "r+") as sampling_file:

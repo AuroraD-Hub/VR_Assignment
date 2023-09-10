@@ -4,6 +4,12 @@ import rospy
 import smach
 import smach_ros
 from VR_Assignment.srv import Spawner_srv, Spawner_srvRequest, Launcher_srv, Launcher_srvRequest, AQHICalculator_srv, AQHICalculator_srvRequest, AQHICalculator_srvResponse
+import airsim
+import pymap3d as pm
+import sys
+import os
+from os.path import dirname, realpath
+import json
 
 client_spawner = rospy.ServiceProxy('spawner', Spawner_srv)
 req_spawner = Spawner_srvRequest()
@@ -16,48 +22,33 @@ res_calculator = AQHICalculator_srvResponse()
 # CAR_MOVING State
 class CarMoving(smach.State):
 
-    def __init__(self):
-        smach.State.__init__(self, outcomes=['goal_reached', 'sampling_done'])
-        rospy.loginfo("Car Actor State")
-        self.n = 0
+	def __init__(self):
+		smach.State.__init__(self, outcomes=['goal_reached', 'sampling_done'])
+		rospy.loginfo("Car Actor State")
 
-        # Create a timer to control if updating pollution file is necessary
-        self.update_timer = rospy.Timer(rospy.Duration(2), self.update)
-
-    def update(self, event):
-        req_calculator.command = 'update'
-        req_calculator.n = self.n
-        res_calculator = client_calculator.call(req_calculator)
-        self.n = res_calculator.n
-
-    def execute(self, userdata):
-        i = input("Whenever you reach your desired position, press 'D' to spawn the drone: ")
-        if i == 'D' or i == 'd':
-            req_calculator.command = 'calculate'
-            req_calculator.n = self.n
-            res_calculator = client_calculator.call(req_calculator)
-            print("The AQHI is: ", res_calculator.AQHI)
-            print(res_calculator.msg)
-            req_spawner.vehicle = 'Car'
-            client_spawner.call(req_spawner)
-            print("Time to sample!")
-            return 'goal_reached'
-        else:
-            print("You chose to reach another position")
-            return 'sampling_done'
+	def execute(self, userdata):
+		i = input("Whenever you reach your desired position, press 'D' to spawn the drone: ")
+		if i == 'D' or i == 'd':
+		    req_spawner.vehicle = 'Car'
+		    client_spawner.call(req_spawner)
+		    print("Time to sample!")
+		    return 'goal_reached'
+		else:
+		    print("You chose to reach another position")
+		    return 'sampling_done'
 		
 		
 # DRONE_FLYING State
 class DroneFlying(smach.State):
 
 	def __init__(self):
-        #Here, DroneFlying state is initialized.
-        	smach.State.__init__(self, outcomes=['goal_reached','sampling_done'])
-        	rospy.loginfo("Drone Actor State")
-#        	self.n = 0
+		#Here, DroneFlying state is initialized.
+		smach.State.__init__(self, outcomes=['goal_reached','sampling_done'])
+		rospy.loginfo("Drone Actor State")
+		self.n = 0
 
-	# Create a timer to control if updating pollution file is necessary
-#        self.update_timer = rospy.Timer(rospy.Duration(2), self.update)
+		# Create a timer to control if updating pollution file is necessary
+		self.update_timer = rospy.Timer(rospy.Duration(2), self.update)
 
 	def update(self, event):
 		req_calculator.command = 'update'
@@ -66,6 +57,25 @@ class DroneFlying(smach.State):
 		self.n = res_calculator.n
 	       
 	def execute(self, userdata):
+		client = airsim.MultirotorClient(ip='172.23.32.1', port=41451)
+		client.confirmConnection()
+		
+		path = dirname(dirname(realpath(__file__)))
+		path = path + '/graphs/drone_graph.json'
+		with open(path) as drone_path:
+			data = json.load(drone_path)
+		
+		# Save last position
+		data_gps = client.getGpsData(gps_name = "", vehicle_name = "")
+		new_position = pm.geodetic2ned(data_gps.gnss.geo_point.latitude, data_gps.gnss.geo_point.longitude, data_gps.gnss.geo_point.altitude, 0, 0, 0)
+		for i in range(0,4):
+			data["nodes"][f"p{i}"]["position"][0] = new_position[0]
+			data["nodes"][f"p{i}"]["position"][1] = new_position[1]
+			data["nodes"][f"p{i}"]["position"][2] = new_position[2]+i*0.000000001
+			
+		with open(path, "w") as save_path:
+			json.dump(data, save_path, indent=2)
+		
 		# Start drone controller
 		req_launcher.command = 'open'
 		client_launcher.call(req_launcher)
@@ -84,9 +94,10 @@ class DroneFlying(smach.State):
 			res_calculator = client_calculator.call(req_calculator)
 			print("The AQHI is: ", res_calculator.AQHI)
 			print(res_calculator.msg)
+			return 'sampling_done'
 		else:
 			return 'goal_reached'
-	
+
 
 def main():
 	"""
@@ -110,10 +121,10 @@ def main():
 	# Open the container
 	with sm:
 		# Add states to the container
-		smach.StateMachine.add('CAR_MOVING', CarMoving(),
+		smach.StateMachine.add('DRONE_FLYING', DroneFlying(),
 					transitions={'goal_reached':'DRONE_FLYING',
 							'sampling_done':'CAR_MOVING'})
-		smach.StateMachine.add('DRONE_FLYING', DroneFlying(),
+		smach.StateMachine.add('CAR_MOVING', CarMoving(),
 					transitions={'goal_reached':'DRONE_FLYING',
 							'sampling_done':'CAR_MOVING'})
 
