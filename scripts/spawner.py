@@ -8,6 +8,7 @@ import os
 from os.path import dirname, realpath
 import json
 import time
+import pymap3d as pm
 from airsim.types import Pose, Vector3r, KinematicsState
 from VR_Assignment.srv import Spawner_srv, Spawner_srvResponse
 

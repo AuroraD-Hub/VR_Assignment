@@ -59,6 +59,7 @@ class DroneFlying(smach.State):
 	def execute(self, userdata):
 		client = airsim.MultirotorClient(ip='172.23.32.1', port=41451)
 		client.confirmConnection()
+		client.enableApiControl(True)
 		
 		path = dirname(dirname(realpath(__file__)))
 		path = path + '/graphs/drone_graph.json'
