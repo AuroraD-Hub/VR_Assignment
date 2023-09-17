@@ -58,10 +58,16 @@ This project has some advantages with respect to how AirSim is used in literatur
 2. Another advantage is that since the algorithm relies on a FSM, it is possible to use this simulation ideally infinite times by moving around the city with the car and sampling the air with the drone continuosly. In this way, the simulation can also be considered more realistic.
 
 On the other hand, there are also some limitation:
-1. This approach works well whenever vehicles control is mutual, which means that it works specifically when car and multirotor don't have to be controlled at the same time. In other cases, e.g. Squadron of UAV and Ground Vehicles with SWARM technique, this approach cannot be used.  
+1. This approach works well whenever vehicles control is mutual, which means that it works specifically when car and multirotor don't have to be controlled at the same time. In other cases, e.g. Squadron of UAV and Ground Vehicles with SWARM technique, this approach cannot be used.
+   
+--------------------------------------------------------------------------------------------  
+# Problems and solution adopted
+Because of AirSim setting and Dronati's package issue explained in the report present in this repository, we re-adapted our project to our own controller with minimum changes in the code.  
+For this reason, when the simulation starts by following the same instruction in section [Running](Running), a drone is spawned and given instruction to fly towards given waypoints and perform the air pollution monitoring procedure of our scope. Then, the user just have to follow the instruction in main terminal to get the information needed.
+
 --------------------------------------------------------------------------------------------  
 # Contacts
-Aurora Durante (aurora99durante@gmail.com)  
-Martina Germani ()  
+Aurora Durante (aurora.durante@coservizi.it)  
+Martina Germani (martinella711@gmail.com)  
 
 Both developpers are Master Students in [Robotics Engineering](https://corsi.unige.it/en/corsi/10635) in UNIGE, Genoa.
