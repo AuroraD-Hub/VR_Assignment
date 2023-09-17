@@ -12,16 +12,12 @@ Once it is done, go into the `AirSim` folder in `Documents` and modify the `sett
 {
     "SeeDocsAt": "https://github.com/Microsoft/AirSim/blob/main/docs/settings.md",
     "SettingsVersion": 1.2,
-    "SimMode": "Car",
+    "SimMode": "Multirotor",
     "LocalHostIp": "insert_your_ip_here",
     "ApiServerPort": 41451,
     "Vehicles": {
-      "Car": {
-        "VehicleType": "PhysXCar"
-      },
-      "Multirotor": {
-        "VehicleType": "SimpleFlight",
-        "DefaultVehicleState": "Disarmed"
+      "Drone": {
+        "VehicleType": "SimpleFlight"
       }
     }
 }
