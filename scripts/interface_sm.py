@@ -69,12 +69,11 @@ class DroneFlying(smach.State):
 		# Save last position
 		#data_gps = client.getGpsData(gps_name = "", vehicle_name = "")
 		#new_position = pm.geodetic2ned(data_gps.gnss.geo_point.latitude, data_gps.gnss.geo_point.longitude, data_gps.gnss.geo_point.altitude, 0, 0, 0)
-		#print("GPS position: ", new_position)
 		new_position = client.getMultirotorState().kinematics_estimated.position
 		for i in range(0,4):
 			data["nodes"][f"p{i}"]["position"][0] = new_position.x_val
 			data["nodes"][f"p{i}"]["position"][1] = new_position.y_val
-			data["nodes"][f"p{i}"]["position"][2] = new_position.z_val+i*10
+			data["nodes"][f"p{i}"]["position"][2] = new_position.z_val-i*10
 			
 		with open(path, "w") as save_path:
 			json.dump(data, save_path, indent=2)

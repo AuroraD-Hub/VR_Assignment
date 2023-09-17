@@ -65,9 +65,6 @@ def update_sampling_data(path, n, res):
 			last_section = sampling_data[-1]
 			if "PM25" not in last_section:
 				print("Key PM25 is not present.")
-			if "N" in last_section == 0:
-				del last_section
-				res.n = 1
 			if "N" not in last_section:
 				print('Updating file')
 				last_section["waypoint"]={}
@@ -114,7 +111,8 @@ def getNowCast(path, n, string):
 	num = 0
 	den = 0
 	for i in data:
-		pol.append(i.get(string, 0))
+		if i.get("N",0) != 0:	
+			pol.append(i.get(string, 0))
 	pol_min = min(pol)
 	pol_max = max(pol)
 	w_star = pol_min/pol_max
@@ -122,7 +120,7 @@ def getNowCast(path, n, string):
 		w = w_star
 	else:
 		w = 0.5
-	for i in range(0,n):
+	for i in range(0,n-1):
 		num = num + math.pow(w,i)*pol[i]
 		den = den + math.pow(w,i)
 	pol_NowCast = num/den
