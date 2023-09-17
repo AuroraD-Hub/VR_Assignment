@@ -55,9 +55,10 @@ def update_sampling_data(path, n, res):
 	pose = Pose()
 	host = rospy.get_param("/calculator/host") # launch param
 	client = airsim.MultirotorClient(ip=host, port=41451)
-	data = client.getGpsData(gps_name = "", vehicle_name = "")
-	new_position = pm.geodetic2ned(data.gnss.geo_point.latitude, data.gnss.geo_point.longitude, data.gnss.geo_point.altitude, 0, 0, 0)
-
+	#data = client.getGpsData(gps_name = "", vehicle_name = "")
+	#new_position = pm.geodetic2ned(data.gnss.geo_point.latitude, data.gnss.geo_point.longitude, data.gnss.geo_point.altitude, 0, 0, 0)
+	new_position = client.getMultirotorState().kinematics_estimated.position
+	
 	if os.path.exists(path) and os.path.getsize(path) > 0:
 		with open(path, "r+") as sampling_file:
 			sampling_data = json.load(sampling_file)
@@ -66,17 +67,15 @@ def update_sampling_data(path, n, res):
 			if "PM25" not in last_section:
 				print("Key PM25 is not present.")
 			if "N" not in last_section:
-				print('Updating file')
 				last_section["waypoint"]={}
 				new_waypoint = {
-					"x": new_position[0],
-					"y": new_position[1],
-					"z": new_position[2]
+					"x": new_position.x_val,
+					"y": new_position.y_val,
+					"z": new_position.z_val
 				}
 				last_section["waypoint"] = new_waypoint
 				last_section["N"] = n
 				res.n = n+1
-				print('File updated')
 			else:
 				res.n = n
 			# Move the cursor to the start of the file and update the file
