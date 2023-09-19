@@ -38,7 +38,7 @@ git clone https://github.com/mmatteo-hub/VR4R_Assignment
 git clone https://github.com/AuroraD-Hub/VR_Assignment
 ```
 Make sure to build your workspace and source it.  
-E-mail [us](Contacts) to get the UE environment already ready to use with AirSim Plugin and our _Pollution BP block_ installed. To correctly visualize the map on Unreal Engine, make sure that `Sun Position Controller` plugin is enabled. For more details, read UE Documentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
+E-mail us ([Contacs](#contacts)) to get the UE environment already ready to use with AirSim Plugin and our _Pollution BP block_ installed. To correctly visualize the map on Unreal Engine, make sure that `Sun Position Controller` plugin is enabled. For more details, read UE Documentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
 Now everything is set to run the simulation!
 ## Running
 To run this solution, first play the simulation on UE and then type in terminal:
@@ -65,7 +65,7 @@ On the other hand, there are also some limitation:
 --------------------------------------------------------------------------------------------  
 # Problems and solution adopted
 Because of AirSim setting and Dronati's package issue explained in the report present in this repository, we re-adapted our project to our own controller with minimum changes in the code.  
-For this reason, when the simulation starts by following the same instruction in section [Running](Running), a drone is spawned and given instruction to fly towards given waypoints and perform the air pollution monitoring procedure of our scope. Then, the user just have to follow the instruction in main terminal to get the information needed.
+For this reason, when the simulation starts by following the same instruction in section [Running](#running), a drone is spawned and given instruction to fly towards given waypoints and perform the air pollution monitoring procedure of our scope. Then, the user just have to follow the instruction in main terminal to get the information needed.
 
 --------------------------------------------------------------------------------------------  
 # Contacts
