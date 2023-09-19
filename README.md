@@ -45,7 +45,9 @@ To run this solution, first play the simulation on UE and then type in terminal:
 ```
 roslaunch VR_Assignment pollution_monitoring.launch host:=$WSL_HOST_IP
 ```
-Follow the instruction given and enjoy your Smart City!
+Note: the first time this project is run, the user will likely get an error about a wrong path of json file in which the _Pollution_ Blueprint block write the sampled data (read the report for more details). This depends on the user workspace and operating system so the user should change it with his/her own path to `SavedData/PollutionData.json` automatically generated from the block inside the UE project folder.  
+
+Now run the solution again, follow the instruction given and enjoy your Smart City!
 
 ---------------------------------------------------------------------------
 # Simulation
