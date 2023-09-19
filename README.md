@@ -38,7 +38,7 @@ git clone https://github.com/mmatteo-hub/VR4R_Assignment
 git clone https://github.com/AuroraD-Hub/VR_Assignment
 ```
 Make sure to build your workspace and source it.  
-To correctly visualize the map on Unreal Engine, make sure that `Sun Position Controller` plugin is enabled. For more details, read UE Documentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
+E-mail [us](Contacts) to get the UE environment already ready to use with AirSim Plugin and our _Pollution BP block_ installed. To correctly visualize the map on Unreal Engine, make sure that `Sun Position Controller` plugin is enabled. For more details, read UE Documentation [here](https://docs.unrealengine.com/5.1/en-US/geographically-accurate-sun-positioning-tool-in-unreal-engine/).  
 Now everything is set to run the simulation!
 ## Running
 To run this solution, first play the simulation on UE and then type in terminal:
