@@ -22,7 +22,7 @@ Once it is done, go into the `AirSim` folder in `Documents` and modify the `sett
     }
 }
 ```
-Since ROS works on Linux, open an Ubuntu terminal previously installed on a [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) and follow these instructions to install [AirSim ROS Wrapper](https://microsoft.github.io/AirSim/airsim_ros_pkgs/).  
+Since ROS works on Linux, open an Ubuntu terminal previously installed with Python3.8 running on a [WSL](https://learn.microsoft.com/en-us/windows/wsl/install) and follow these instructions to install [AirSim ROS Wrapper](https://microsoft.github.io/AirSim/airsim_ros_pkgs/).  
 Then, to set the environment for the project, run on Ubuntu terminal:
 ```
 echo "export WSL_HOST_IP=(your WSL IP address)" >> ⁓/.bashrc
@@ -66,6 +66,11 @@ On the other hand, there are also some limitation:
 # Problems and solution adopted
 Because of AirSim setting and Dronati's package issue explained in the report present in this repository, we re-adapted our project to our own controller with minimum changes in the code.  
 For this reason, when the simulation starts by following the same instruction in section [Running](#running), a drone is spawned and given instruction to fly towards given waypoints and perform the air pollution monitoring procedure of our scope. Then, the user just have to follow the instruction in main terminal to get the information needed.
+
+--------------------------------------------------------------------------------------------  
+# Troubleshooting
+Since AirSim is no more updated from 2022, all its dependencies should be based on a compatible version of Pyhton. That is why it is important to use Python 3.8, but not a newer one.  
+Eventually, consider to create a virtual environment with the correct Python version or any other tools as Anaconda.
 
 --------------------------------------------------------------------------------------------  
 # Contacts
